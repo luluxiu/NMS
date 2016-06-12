@@ -1,0 +1,297 @@
+<#include "../../layout/header.html" >
+
+<div class="pageheader">
+  <h2><i class="fa fa-tasks"></i>设备</h2>
+  <div class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li><a href="index.html">设备</a></li>
+      <li>${router.getMac() ?if_exists}</a></li>
+      <li class="active">status</li>
+    </ol>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="contentpanel">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-heading">
+          <h4 class="panel-title">路由器 MAC: ${router.getMac() ?if_exists}
+            <div class="pull-right">
+              <button class="btn btn-default" type="button" name="refresh" title="Refresh">
+                <i class="fa fa-refresh icon-refresh"></i>
+              </button>
+            </div>
+          </h4>
+        </div>
+        <div class="panel-body">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs nav-line">
+            <li class="active"><a href="#version" data-toggle="tab"><strong>Version</strong></a></li>
+            <li><a href="#system" data-toggle="tab"><strong>System</strong></a></li>
+            <li><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
+            <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
+            <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
+            <li><a href="#client" data-toggle="tab"><strong>Client</strong></a></li>
+          </ul>
+
+          <div class="tab-content">
+            <!-- version tab-pane -->
+            <div class="tab-pane active" id="version">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- system tab-pane -->
+            <div class="tab-pane" id="system">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- wan tab-pane -->
+            <div class="tab-pane" id="wan">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- lan tab-pane -->
+            <div class="tab-pane" id="lan">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- wifi tab-pane -->
+            <div class="tab-pane" id="wifi">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- client tab-pane -->
+            <div class="tab-pane" id="client">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group routerStatusInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.tab-content -->
+        </div><!-- /.panel-body -->
+      </div><!-- /.panel -->
+    </div><!-- /.col-md-12 -->
+  </div>
+</div><!-- /.contentpanel -->
+
+<script>
+  var routerId = "${router.getId() ?if_exists}";
+  var ROUTER_STATUS_URL = "${viewHelper.getPath()}/device/ap/" + routerId + "/show";
+
+  $(function() {
+
+    loadStatusInfo();
+    $("button[name=refresh]").click(function() {
+      clearHistoryInfo();
+      loadStatusInfo();
+    })
+
+  })
+
+  function loadStatusInfo() {
+    $.ajax({
+      cache: false,
+      url: ROUTER_STATUS_URL,
+      type: "get",
+      success: function(result) {
+        processStatusInfo(result.status);
+      },
+      error: function() {
+        alert("获取信息失败");
+      }
+    });
+  }
+
+  function clearHistoryInfo() {
+    $(".routerStatusInfo").empty();
+  }
+
+  function processStatusInfo(result) {
+    processStatusVersionInfo($.parseJSON(result.version));
+    processStatusSystemInfo($.parseJSON(result.system));
+    processStatusWanInfo($.parseJSON(result.wan));
+    processStatusLanInfo($.parseJSON(result.lan), $.parseJSON(result.client));
+    processStatusWiFiInfo($.parseJSON(result.wifi));
+  }
+
+  function processStatusWiFiInfo(wifi) {
+
+    if(!wifi) {
+      return;
+    }
+
+    if(wifi.wifi == 1) {
+      appendDom("#wifi .routerStatusInfo", "WiFi", "开启");
+    }
+    else {
+      appendDom("#wifi .routerStatusInfo", "WiFi", "关闭");
+    }
+
+    appendDom("#wifi .routerStatusInfo", "SSID", wifi.ssid);
+    appendDom("#wifi .routerStatusInfo", "信道", wifi.channel);
+    appendDom("#wifi .routerStatusInfo", "最大连接数", wifi.maxStation);
+    appendDom("#wifi .routerStatusInfo", "加密方式", wifi.encryption);
+
+    switch(wifi.encryption) {
+      case "none":
+        break;
+
+      case "open":
+        appendDom("#wifi .routerStatusInfo", "密码", wifi.key);
+        break;
+
+      case "psk":
+        /* pass through */
+
+      case "psk2":
+        /* pass through */
+
+      case "psk-mixed":
+        appendDom("#wifi .routerStatusInfo", "算法", wifi.cipher);
+        appendDom("#wifi .routerStatusInfo", "密码", wifi.key);
+        break;
+    }
+  }
+
+  function processStatusClientInfo(client) {
+
+    if(client && client instanceof Array) {
+      var i;
+      for(i in client) {
+        appendDom("#client .routerStatusInfo", client[i].ip, client[i].mac);
+      }
+    }
+  }
+
+  function processStatusLanInfo(lan, client) {
+
+    if(!lan) {
+      return;
+    }
+
+    appendDom("#lan .routerStatusInfo", "IP", lan.lanAddress);
+    appendDom("#lan .routerStatusInfo", "子网掩码", lan.lanNetmask);
+
+    if(lan.dhcp == 0) {
+      appendDom("#lan .routerStatusInfo", "DHCP", "关闭");
+      return;
+    }
+
+    appendDom("#lan .routerStatusInfo", "DHCP", "开启");
+
+    appendDom("#lan .routerStatusInfo", "开始", lan.start);
+    appendDom("#lan .routerStatusInfo", "客户数", lan.limit);
+    appendDom("#lan .routerStatusInfo", "租用时间", lan.leaseTime);
+
+    processStatusClientInfo(client);
+  }
+
+  function processStatusWanInfo(wan) {
+
+    if(!wan || !wan.protocol) {
+      return;
+    }
+
+    appendDom("#wan .routerStatusInfo", "模式", wan.protocol);
+    switch(wan.protocol) {
+      case "DHCP":
+        break;
+
+      case "STATIC":
+        appendDom("#wan .routerStatusInfo", "IP", wan.address);
+        appendDom("#wan .routerStatusInfo", "子网掩码", wan.netmask);
+        appendDom("#wan .routerStatusInfo", "网关", wan.gateway);
+        break;
+
+      case "PPPOE":
+        appendDom("#wan .routerStatusInfo", "用户名", wan.username);
+        appendDom("#wan .routerStatusInfo", "密码", wan.password);
+        break;
+
+      case "3/4G":
+        appendDom("#wan .routerStatusInfo", "调制解调器节点", wan.modemDevice);
+        appendDom("#wan .routerStatusInfo", "服务类型", wan.serviceType);
+        appendDom("#wan .routerStatusInfo", "APN", wan.APN);
+        appendDom("#wan .routerStatusInfo", "Dial Number", wan.dialNumber);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function processStatusVersionInfo(version) {
+
+    if(!version) {
+      return;
+    }
+
+    appendDom("#version .routerStatusInfo", "产品", version.productName);
+    appendDom("#version .routerStatusInfo", "固件版本", version.firmwareVersion);
+    appendDom("#version .routerStatusInfo", "硬件版本", version.hardwareVersion);
+    appendDom("#version .routerStatusInfo", "内核版本", version.kernelVersion);
+    appendDom("#version .routerStatusInfo", "系统版本", version.OSVersion);
+  }
+
+  function processStatusSystemInfo(system) {
+
+    if(!system) {
+      return;
+    }
+
+    appendDom("#system .routerStatusInfo", "已启动", system.uptime);
+    appendDom("#system .routerStatusInfo", "负载", system.loadAverage);
+    appendDom("#system .routerStatusInfo", "总内存", system.memoryTotal);
+    appendDom("#system .routerStatusInfo", "剩余内存", system.memoryFree);
+    appendDom("#system .routerStatusInfo", "缓存", system.memoryCached);
+    appendDom("#system .routerStatusInfo", "缓冲", system.memoryBuffered);
+  }
+
+  function appendDom(selector, key, value) {
+
+    if(!selector || !key || !value) {
+      return;
+    }
+
+    $(selector).append(
+        '<li class="list-group-item">'
+        + key
+        + '<span>'
+        + value
+        + '</span></li>');
+  }
+
+</script>
+
+
+<#include "../../layout/footer.html" >

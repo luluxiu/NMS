@@ -1,0 +1,369 @@
+<#include "../../../layout/header.html" >
+
+<div class="pageheader">
+  <h2><i class="fa fa-tasks"></i>模板</h2>
+  <div class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li class="active">模板</li>
+    </ol>
+  </div>
+</div><!-- pageheader -->
+
+
+<!-- main content -->
+<div class="contentpanel">
+  <div class="row">
+    <div class="col-md-12">
+      <p class="toolbar">
+        <a class="create btn btn-success" href="javascript:" >
+          <i class="fa fa-plus">&nbsp;&nbsp;</i>添加
+        </a>
+        <span class="alert"></span>
+      </p>
+
+      <table id="table" class="table table-no-bordered table-inverse" data-show-refresh="true"
+        data-show-columns="true" data-striped="true" data-show-toggle="true"
+        data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
+        data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
+        data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+        data-search-on-enter-key='true'>
+        <thead>
+          <th data-formatter="runningFormatter">No.</th>
+          <th data-field="id" data-align="center" data-visible="false">ID</th>
+          <th data-field="templateName" data-align="center" data-sortable="true">名称</th>
+          <th data-field="templateDescription" data-align="center" data-visible="false">描述</th>
+          <th data-field="updatedAt" data-align="center" data-visible="true" data-sortable="true"
+            data-sort-order="desc">更新时间</th>
+          <th data-field="createdAt" data-align="center" data-visible="false" data-sortable="true"
+            data-sort-order="desc">创建时间</th>
+          <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+        </thead>
+      </table>
+
+      <div class="row">
+        <div id="modal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form class="form-horizontal m-t required-validate" id="config" autocomplete="off" novalidate="novalidate">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body form-horizontal m-t required-validate">
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">模板名</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="templateName" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">模板说明</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="templateDescription" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">WiFi</label>
+                    <div class="col-sm-7">
+                      <div class="ckbox ckbox-success ">
+                        <input type="checkbox" id="wifi" name="wifi" checked="checked" value="1" />
+                        <label for="wifi">开启WiFi</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">SSID</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="ssid" name="ssid" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">信道</label>
+                    <div class="col-sm-7">
+                      <select  id="channel" name="channel" class="form-control">
+                          <option value="0" selected="selected">auto</option>
+                          <option value="1">2412MHz (Channel 1)</option>
+                          <option value="2">2417MHz (Channel 2)</option>
+                          <option value="3">2422MHz (Channel 3)</option>
+                          <option value="4">2427MHz (Channel 4)</option>
+                          <option value="5">2432MHz (Channel 5)</option>
+                          <option value="6">2437MHz (Channel 6)</option>
+                          <option value="7">2442MHz (Channel 7)</option>
+                          <option value="8">2447MHz (Channel 8)</option>
+                          <option value="9">2452MHz (Channel 9)</option>
+                          <option value="10">2457MHz (Channel 10)</option>
+                          <option value="11">2462MHz (Channel 11)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">最大连接数</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="maxStation" name="maxStation" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">加密</label>
+                    <div class="col-sm-7">
+                      <select  id="encryption" name="encryption" class="form-control">
+                        <option value="none">No Encryption</option>
+                        <option value="open">WEP开放认证</option>
+                        <option value="psk">WPA-PSK</option>
+                        <option value="psk2">WPA2-PSK</option>
+                        <option value="psk-mixed">WPA-PSK/WPA2-PSK Mixed Mode</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" id="wifi-encryption-cipher">
+                    <label class="col-sm-3 control-label">算法</label>
+                    <div class="col-sm-7">
+                      <select id="cipher" name="cipher" class="form-control">
+                        <option value="aes">AES</option>
+                        <option value="tkip">TKIP</option>
+                        <option value="aes+tkip">AES+TKIP</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" id="wifi-encryption-key">
+                    <label class="col-sm-3 control-label">密码</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="key" name="key" class="form-control" />
+                    </div>
+                  </div>
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-primary submit">提交</button>
+                </div>
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      </div><!-- /.row -->
+    </div>
+  </div>
+</div><!-- main content -->
+
+
+
+<script type="text/javascript">
+  var TEMPLATE_BASE = "${viewHelper.getPath()}/device/ap/template/wifi";
+  var TEMPLATE_SHOW = TEMPLATE_BASE + "/show";
+  var TEMPLATE_EDIT = TEMPLATE_BASE + "/edit";
+  var TEMPLATE_DEL = TEMPLATE_BASE + "/delete";
+
+  var _csrf = "${_csrf.token ?if_exists}";
+  var $alert = $('.alert').hide();
+  var $modal = $('#modal').modal({show: false});
+  var $table = $('#table').bootstrapTable({
+    sortOrder: "desc",
+    url: TEMPLATE_SHOW,
+    formatShowingRows : formatShowingRows,
+    formatRecordsPerPage : formatRecordsPerPage
+  })
+
+
+  $(function() {
+
+    $table.on('post-body.bs.table', function () {
+      var $search = $table.data('bootstrap.table')
+        .$toolbar.find('.search input');
+      $search.attr('placeholder', '根据模板名字搜索 ...');
+    });
+
+    $('.create').click(function() {
+      showModal($(this).text());
+    });
+
+
+    //wifi
+    $("select[name='encryption']").change(function(){
+
+      switch($("select[name='encryption']").val()) {
+        case "none":
+          $("#wifi-encryption-cipher").hide();
+          $("#wifi-encryption-key").hide();
+          break;
+
+        case "open":
+          $("#wifi-encryption-cipher").hide();
+          $("#wifi-encryption-key").show();
+          break;
+
+        case "psk":
+          /* pass through */
+
+        case "psk2":
+          /* pass through */
+
+        case "psk-mixed":
+          $("#wifi-encryption-cipher").show();
+          $("#wifi-encryption-key").show();
+          break;
+
+        default:
+          break;
+      }
+    })
+
+    $modal.find('.submit').click(function() {
+      var data;
+      var title;
+      var url;
+
+      if($modal.data('id') && $modal.data('id') >=0) {
+        data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
+        url = TEMPLATE_EDIT;
+        title = "修改";
+      }
+      else {
+        data = $("#config").serialize() + '&_csrf=' + _csrf;
+        url = TEMPLATE_BASE;
+        title = "添加";
+      }
+      $.ajax({
+        url: url,
+        type: 'post',
+        data: data,
+        success: function (result) {
+          if(result.result == "success") {
+            $modal.modal('hide');
+            $table.bootstrapTable('refresh');
+            showAlert(title + '成功!', 'success');
+          }
+          else {
+            $modal.modal('hide');
+            showAlert(title + '失败! ' + result.msg, 'danger');
+          }
+        },
+        error: function () {
+          $modal.modal('hide');
+          showAlert(title + '失败!', 'danger');
+        }
+      });
+    });
+
+  });
+
+
+  window.actionEvents = {
+    'click .update': function (e, value, row) {
+      showModal("修改", row);
+    },
+    'click .remove': function (e, value, row) {
+      if (confirm('确定要删除这一项吗?')) {
+        var data = "id=" + row.id + "&_csrf=" + _csrf;
+        $.ajax({
+          url: TEMPLATE_DEL,
+          type: 'post',
+          data: data,
+          success: function (result) {
+            if(result.result == "success") {
+              $table.bootstrapTable('refresh');
+              showAlert('删除成功!', 'success');
+            }
+            else {
+              showAlert('删除错误!' + result.msg, 'danger');
+            }
+          },
+          error: function () {
+            showAlert('删除错误!', 'danger');
+          }
+        })
+      }
+    }
+  };
+
+  function showModal(title, row) {
+    row = row || {
+        wifi: '',
+        ssid: '',
+        channel: '0',
+        maxStation: '',
+        encryption: 'none',
+        cipher: 'aes+tkip',
+        key: '',
+        templateName: '',
+        templateDescription: ''
+      };
+
+    if(typeof(row.id) == "undefined") {
+      $modal.data('id', -1);
+    }
+    else if(row.id >= 0){
+      $modal.data('id', row.id);
+      $modal.find('input[name][type="text"]').each(function () {
+        $(this).val("");
+      });
+    }
+
+    $modal.find('.modal-title').text(title);
+    for (var name in row) {
+      $modal.find('input[name="' + name + '"][type="text"]').val(row[name]);
+    }
+
+    if(row['wifi'] == 0) {
+      $("#wifi").prop("checked", false);
+    }
+    else {
+      $("#wifi").prop("checked", true);
+    }
+
+    $("#cipher").val(row['cipher']);
+    $("select[name='encryption']").val(row['encryption']).change();
+
+    $modal.modal('show');
+  }
+
+
+  /* static */
+  function actionFormatter(value) {
+    return [
+      '<div class="btn-group" role="group">',
+      '<a class="btn btn-primary btn-xs update" href="javascript:"><i class="fa fa-cog">&nbsp;&nbsp;</i>修改</a>',
+      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
+      '</div>'
+    ].join('');
+  }
+
+  function queryParams(params) {
+    return {
+      page: params.pageNumber,
+      size: params.pageSize,
+      sortName: params.sortName || "updatedAt",
+      sortOrder: params.sortOrder || "desc",
+      search: params.searchText,
+      _r: Math.floor(Math.random()*10000)
+    };
+  }
+
+  /* alert */
+  function showAlert(title, type) {
+    $alert.attr('class', 'alert alert-' + type || 'success').html('<i class="fa fa-check"></i> ' + title).show();
+    setTimeout(function(){$alert.hide();}, 3000);
+  }
+
+  /* page formatter */
+  function formatRecordsPerPage(pageNumber) {
+    return '&nbsp;' + pageNumber + ' 每页';
+  }
+
+  function formatShowingRows(pageFrom, pageTo, totalRows) {
+    return '共 ' + totalRows + ' 项记录';
+  }
+
+  function runningFormatter(value, row, index) {
+    return index + 1;
+  }
+  /* page formatter - end */
+
+</script>
+
+
+<#include "../../../layout/footer.html" >
+

@@ -1,0 +1,227 @@
+<#include "../../../layout/header.html" >
+
+<div class="pageheader">
+  <h2><i class="fa fa-tasks"></i>分组</h2>
+  <div class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li><a href="#">分组</a></li>
+      <li class="groupName">N/A</li>
+      <li class="active">模板</li>
+    </ol>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="contentpanel">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-heading">
+          <h4 class="panel-title">分组 : <span class="groupName">N/A</span>
+            <div class="pull-right">
+              <button class="btn btn-default" type="button" name="refresh" title="Refresh">
+                <i class="fa fa-refresh icon-refresh"></i>
+              </button>
+            </div>
+          </h4>
+        </div>
+        <div class="panel-body">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs nav-line">
+            <li class="active"><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
+            <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
+            <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
+          </ul>
+
+          <div class="tab-content">
+
+            <!-- wan tab-pane -->
+            <div class="tab-pane active" id="wan">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group groupConfigInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- lan tab-pane -->
+            <div class="tab-pane" id="lan">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group groupConfigInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- wifi tab-pane -->
+            <div class="tab-pane" id="wifi">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group groupConfigInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div><!-- /.tab-content -->
+        </div><!-- /.panel-body -->
+      </div><!-- /.panel -->
+    </div><!-- /.col-md-12 -->
+  </div>
+</div><!-- /.contentpanel -->
+
+<script>
+  var groupId = "${groupId ?if_exists}";
+  var GROUP_CONFIG_URL = "${viewHelper.getPath()}/device/ap/group/" + groupId + "/configuration/show";
+
+  $(function() {
+
+    loadGroupInfo();
+    $("button[name=refresh]").click(function() {
+      clearHistoryInfo();
+      loadGroupInfo();
+    });
+
+  })
+
+  function loadGroupInfo() {
+    $.ajax({
+      cache: false,
+      url: GROUP_CONFIG_URL,
+      type: "get",
+      success: function(result) {
+        processConfigInfo(result);
+      },
+      error: function() {
+        alert("获取信息失败");
+      }
+    });
+  }
+
+  function clearHistoryInfo() {
+    $(".groupConfigInfo").empty();
+  }
+
+  function processConfigInfo(result) {
+
+    $(".groupName").html(result.group.name);
+    processConfigWanInfo(result.wan);
+    processConfigLanInfo(result.lan);
+    processConfigWiFiInfo(result.wifi);
+  }
+
+  function processConfigWiFiInfo(wifi) {
+
+    if(!wifi) {
+      return;
+    }
+
+    if(wifi.wifi == 1) {
+      appendDom("#wifi .groupConfigInfo", "WiFi", "开启");
+    }
+    else {
+      appendDom("#wifi .groupConfigInfo", "WiFi", "关闭");
+    }
+
+    appendDom("#wifi .groupConfigInfo", "SSID", wifi.ssid);
+    appendDom("#wifi .groupConfigInfo", "信道", wifi.channel);
+    appendDom("#wifi .groupConfigInfo", "最大连接数", wifi.maxStation);
+    appendDom("#wifi .groupConfigInfo", "加密方式", wifi.encryption);
+
+    switch(wifi.encryption) {
+      case "none":
+        break;
+
+      case "open":
+        appendDom("#wifi .groupConfigInfo", "密码", wifi.key);
+        break;
+
+      case "psk":
+        /* pass through */
+
+      case "psk2":
+        /* pass through */
+
+      case "psk-mixed":
+        appendDom("#wifi .groupConfigInfo", "算法", wifi.cipher);
+        appendDom("#wifi .groupConfigInfo", "密码", wifi.key);
+        break;
+    }
+  }
+
+
+  function processConfigLanInfo(lan) {
+
+    if(!lan) {
+      return;
+    }
+
+    appendDom("#lan .groupConfigInfo", "IP", lan.lanAddress);
+    appendDom("#lan .groupConfigInfo", "子网掩码", lan.lanNetmask);
+
+    if(lan.dhcp == 0) {
+      appendDom("#lan .groupConfigInfo", "DHCP", "关闭");
+      return;
+    }
+
+    appendDom("#lan .groupConfigInfo", "DHCP", "开启");
+
+    appendDom("#lan .groupConfigInfo", "开始", lan.start);
+    appendDom("#lan .groupConfigInfo", "客户数", lan.limit);
+    appendDom("#lan .groupConfigInfo", "租用时间", lan.leaseTime);
+  }
+
+  function processConfigWanInfo(wan) {
+
+    if(!wan || !wan.protocol) {
+      return;
+    }
+
+    appendDom("#wan .groupConfigInfo", "模式", wan.protocol);
+    switch(wan.protocol) {
+      case "dhcp":
+        break;
+
+      case "static":
+        appendDom("#wan .groupConfigInfo", "IP", wan.address);
+        appendDom("#wan .groupConfigInfo", "子网掩码", wan.netmask);
+        appendDom("#wan .groupConfigInfo", "网关", wan.gateway);
+        break;
+
+      case "pppoe":
+        appendDom("#wan .groupConfigInfo", "用户名", wan.username);
+        appendDom("#wan .groupConfigInfo", "密码", wan.password);
+        break;
+
+      case "3g":
+        appendDom("#wan .groupConfigInfo", "调制解调器节点", wan.modemDevice);
+        appendDom("#wan .groupConfigInfo", "服务类型", wan.serviceType);
+        appendDom("#wan .groupConfigInfo", "APN", wan.APN);
+        appendDom("#wan .groupConfigInfo", "Dial Number", wan.dialNumber);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  function appendDom(selector, key, value) {
+
+    if(!selector || !key || !value) {
+      return;
+    }
+
+    $(selector).append(
+        '<li class="list-group-item">'
+        + key
+        + '<span>'
+        + value
+        + '</span></li>');
+  }
+
+</script>
+
+
+<#include "../../../layout/footer.html" >

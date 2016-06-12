@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>NMS</title>
+  <link rel="stylesheet" type="text/css" id="theme" href="${viewHelper.getPath()}/css/bootstrap-table.css"/>
+  <link href="${viewHelper.getPath()}/css/style.default.css" rel="stylesheet">
+  <link href="${viewHelper.getPath()}/css/style.custom.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="${viewHelper.getPath()}/css/bootstrap-select.min.css"/>
+  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="${viewHelper.getPath()}/js/html5shiv.js"></script>
+  <script src="${viewHelper.getPath()}/js/respond.min.js"></script>
+  <![endif]-->
+
+  <script src="${viewHelper.getPath()}/js/jquery-1.11.1.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/jquery-migrate-1.2.1.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/bootstrap.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/modernizr.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/jquery.sparkline.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/toggles.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/retina.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/select2.min.js"></script>
+  <script src="${viewHelper.getPath()}/js/jquery.cookies.js"></script>
+
+  <script type="text/javascript" src="${viewHelper.getPath()}/js/bootstrap-table.js"></script>
+  <script type="text/javascript" src="${viewHelper.getPath()}/js/bootstrap-select.min.js"></script>
+  <!-- jquery form validate -->
+  <script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/jquery.validate.min.js'></script>
+  <script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/messages_zh.js'></script>
+  <script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/additional-methods.js'></script>
+  <!-- end jquery form validate -->
+</head>
+<body>
+
+<!-- Preloader -->
+<div id="preloader">
+  <div id="status"><i class="fa fa-spinner fa-spin"></i></div>
+</div>
+
+<section>
+  <div class="leftpanel">
+    <!-- logopanel -->
+    <div class="logopanel">
+      <h1>NMS</h1>
+    </div>
+
+    <div class="leftpanelinner">
+      <!-- This is only visible to small devices -->
+      <div class="visible-xs hidden-sm hidden-md hidden-lg">
+        <div class="media userlogged">
+          <img alt="" src="${viewHelper.getPath()}/images/photos/loggeduser.png" class="media-object">
+          <div class="media-body">
+            <h4>${viewHelper.getUsername() ?if_exists}</h4>
+            <span>"Life is so..."</span>
+          </div>
+        </div>
+
+        <h5 class="sidebartitle actitle">账户</h5>
+        <ul class="nav nav-pills nav-stacked nav-bracket mb30">
+          <li><a href="${viewHelper.getPath()}/password"><i class="fa fa-cog"></i> <span>账户设置</span></a></li>
+          <li><a href="#"><i class="fa fa-question-circle"></i> <span>帮助</span></a></li>
+          <li><a href="#" class="mb-control" data-box="#mb-signout"><i class="fa fa-sign-out"></i> <span>注销</span></a></li>
+        </ul>
+      </div>
+
+      <h5 class="sidebartitle">菜单</h5>
+      <ul class="nav nav-pills nav-stacked nav-bracket">
+        <li id="menuDevice"><a href="${viewHelper.getPath()}/device/ap"><i class="fa fa-tasks"></i> <span>设备列表</span></a></li>
+        <li id="menuTemplate" class="nav-parent"><a href=""><i class="fa fa-files-o"></i> <span>模板</span></a>
+          <ul class="children">
+            <li id="menuTemplateWAN"><a href="${viewHelper.getPath()}/device/ap/template/wan">WAN</a></li>
+            <li id="menuTemplateLAN"><a href="${viewHelper.getPath()}/device/ap/template/lan">LAN</a></li>
+            <li id="menuTemplateWiFi"><a href="${viewHelper.getPath()}/device/ap/template/wifi">WiFi</a></li>
+            <li id="menuTemplateFirewall"><a href="${viewHelper.getPath()}/device/ap/template/firewall">Firewall</a></li>
+            <li id="menuTemplateOTA"><a href="${viewHelper.getPath()}/device/ap/template/ota">OTA</a></li>
+            <li id="menuTemplateQoS"><a href="${viewHelper.getPath()}/device/ap/template/qos">QoS</a></li>
+          </ul>
+        </li>
+        <li id="menuGroup" class="nav-parent"><a href=""><i class="fa fa-object-group"></i> <span>分组</span></a>
+          <ul class="children">
+            <li id="menuGroupList"><a href="${viewHelper.getPath()}/device/ap/group">列表</a></li>
+            <li id="menuGroupNode"><a href="${viewHelper.getPath()}/device/ap/group/node">详细</a></li>
+          </ul>
+        </li>
+      </ul>
+
+    </div><!-- leftpanelinner -->
+  </div><!-- leftpanel -->
+
+  <div class="mainpanel">
+    <div class="headerbar">
+      <a class="menutoggle"><i class="fa fa-bars"></i></a>
+      <div class="header-right">
+        <ul class="headermenu">
+          <li>
+            <div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <img src="${viewHelper.getPath()}/images/photos/loggeduser.png" alt="" />
+                admin
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-usermenu pull-right">
+                <li><a href="${viewHelper.getPath()}/password"><i class="glyphicon glyphicon-cog"></i>账户设置</a></li>
+                <li><a href="#"><i class="glyphicon glyphicon-question-sign"></i>帮助</a></li>
+                <li><a href="#" class="mb-control" data-box="#mb-signout"><i class="glyphicon glyphicon-log-out"></i>注销</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </div><!-- header-right -->
+    </div><!-- headerbar -->

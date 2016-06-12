@@ -1,0 +1,354 @@
+<#include "../../../../layout/header.html" >
+
+<div class="pageheader">
+  <h2><i class="fa fa-tasks"></i>节点信息</h2>
+  <div class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li class="active">节点信息</li>
+    </ol>
+  </div>
+</div><!-- pageheader -->
+
+
+<!-- main content -->
+<div class="contentpanel">
+  <#if group ??>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-heading">
+          ${group.getName()} - 组内下发配置
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-sm-6">
+              <select id="scope" class="select2" data-placeholder="选择域 ..." multiple="multiple">
+                <option value="all">ALL</option>
+                <#if group.getWan() ??>
+                <option value="wan">WAN</option>
+                </#if>
+                <#if group.getLan() ??>
+                <option value="lan">LAN</option>
+                </#if>
+                <#if group.getWifi() ??>
+                <option value="wifi">WiFi</option>
+                </#if>
+              </select>
+            </div>
+            <div class="col-sm-5 col-sm-offset-1">
+              <input type="button" class="btn btn-success" name="template" value="下发配置" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </#if>
+
+  <div class="row">
+    <div class="col-md-12">
+      <p class="toolbar">
+      <#if group ??>
+        <a class="create btn btn-success" href="javascript:" >
+          <i class="fa fa-plus">&nbsp;&nbsp;</i>添加
+        </a>
+      </#if>
+        <span class="alert"></span>
+      </p>
+
+      <table id="table" class="table table-no-bordered table-inverse" data-show-refresh="true"
+             data-show-columns="true" data-striped="true" data-show-toggle="true"
+             data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
+             data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
+             data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+             data-search-on-enter-key='true'>
+        <thead>
+        <th data-formatter="runningFormatter">No.</th>
+        <th data-field="id" data-align="center" data-visible="false">ID</th>
+        <th data-field="start" data-align="center" data-sortable="true">起始MAC地址</th>
+        <th data-field="end" data-align="center" data-sortable="true">结束MAC地址</th>
+        <th data-field="groupName" data-align="center" data-sortable="true">分组名</th>
+        <th data-field="description" data-align="center" data-visible="false">描述</th>
+        <th data-field="updatedAt" data-align="center" data-visible="false" data-sortable="true"
+            data-sort-order="desc">更新时间</th>
+        <th data-field="createdAt" data-align="center" data-visible="false" data-sortable="true"
+            data-sort-order="desc">创建时间</th>
+        <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+        </thead>
+      </table>
+
+      <div class="row">
+        <div id="modal" class="modal fade" >
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form class="form-horizontal m-t required-validate" id="config" autocomplete="off" novalidate="novalidate">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body form-horizontal m-t required-validate">
+                  <!-- wan template -->
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">起始MAC地址: </label>
+                    <div class="col-md-7">
+                      <input type="text" name="start" id="start" class="form-control" />
+                    </div>
+                  </div>
+                  <!-- lan template -->
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">结束MAC地址: </label>
+                    <div class="col-md-7">
+                      <input type="text" name="end" id="end" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">描述 : </label>
+                    <div class="col-md-7">
+                      <input type="text" class="form-control" name="description" id="description" >
+                    </div>
+                  </div>
+                  <input type="hidden" name="groupName" />
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                  <button type="button" class="btn btn-primary submit">提交</button>
+                </div>
+              </form>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        </div>
+      </div> <!-- /.row -->
+
+    </div>
+  </div>
+</div><!-- main content -->
+
+
+
+<script type="text/javascript">
+  var NODE_INFO_BASE = "${viewHelper.getPath()}/device/ap/group/node";
+  var NODE_INFO_SHOW = NODE_INFO_BASE + "/show";
+  var NODE_INFO_EDIT = NODE_INFO_BASE + "/edit";
+  var NODE_INFO_DEL = NODE_INFO_BASE + "/delete";
+
+
+  var _csrf = "${_csrf.token ?if_exists}";
+  var groupName = "";
+  <#if group ??>
+    groupName = "${group.getName()}";
+  </#if>
+
+  $("input[name='groupName']").val(groupName);
+  $("#scope").select2({width: '100%'});
+  var $alert = $('.alert').hide();
+  var $modal = $('#modal').modal({show: false});
+  var $table = $('#table').bootstrapTable({
+    sortOrder: "desc",
+    url: NODE_INFO_SHOW,
+    formatShowingRows : formatShowingRows,
+    formatRecordsPerPage : formatRecordsPerPage
+  })
+
+  /* jquery validator */
+  $.validator.setDefaults({
+    onkeyup: function (element, event) {
+      if (event.which === 9 && this.elementValue(element) === "") {
+        return;
+      } else {
+        this.element(element);
+      }
+    }
+  });
+
+  $.validator.addMethod("BigOne", function(value, element, param) {
+    if(value.toLocaleLowerCase() < $("#startMac").val().toLocaleLowerCase()) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  });
+  /*  end */
+
+  $(function() {
+
+    $table.on('post-body.bs.table', function () {
+      var $search = $table.data('bootstrap.table').$toolbar.find('.search input');
+      $search.attr('placeholder', '根据MAC搜索 ...');
+    });
+
+    $('.create').click(function() {
+      showModal($(this).text());
+    });
+
+    var validator = $("#config").validate({
+      rules: {
+        start: {
+          required: true,
+          isMACAddr: true
+        },
+        end:  {
+          required: true,
+          isMACAddr: true,
+          BigOne: true
+        },
+        description:  {
+          rangelength: [1, 128]
+        }
+      },
+      messages: {
+        endMac: {
+          BigOne: "起始MAC地址必须不大于结束MAC地址"
+        }
+      },
+      errorClass: "error"
+    });
+
+    $modal.find('.submit').click(function() {
+      var data;
+      var title;
+      var url;
+
+      if(validator.form() == false) {
+        return false;
+      }
+
+      if($modal.data('id') && $modal.data('id') >=0) {
+        data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
+        url = NODE_INFO_EDIT;
+        title = "修改";
+      }
+      else {
+        data = $("#config").serialize() + '&_csrf=' + _csrf;
+        url = NODE_INFO_BASE;
+        title = "添加";
+      }
+      $.ajax({
+        url: url,
+        type: 'post',
+        data: data,
+        success: function (result) {
+          if(result.result == "success") {
+            $modal.modal('hide');
+            $table.bootstrapTable('refresh');
+            showAlert(title + '成功!', 'success');
+          }
+          else {
+            $modal.modal('hide');
+            showAlert(title + '失败! ' + result.msg, 'danger');
+          }
+        },
+        error: function () {
+          $modal.modal('hide');
+          showAlert(title + '失败!', 'danger');
+        }
+      });
+    });
+
+  });
+
+
+  window.actionEvents = {
+    'click .update': function (e, value, row) {
+      showModal($(this).attr('title'), row);
+    },
+    'click .remove': function (e, value, row) {
+      if (confirm('确定要删除这一项吗?')) {
+        var data = "id=" + row.id + "&_csrf=" + _csrf;
+        $.ajax({
+          url: NODE_INFO_DEL,
+          type: 'post',
+          data: data,
+          success: function (result) {
+            if(result.result == "success") {
+              $table.bootstrapTable('refresh');
+              showAlert('删除成功!', 'success');
+            }
+            else {
+              showAlert('删除错误!' + result.msg, 'danger');
+            }
+          },
+          error: function () {
+            showAlert('删除错误!', 'danger');
+          }
+        })
+      }
+    }
+  };
+
+  function showModal(title, row) {
+    row = row || {
+        start: '',
+        end: '',
+        description: ''
+      };
+
+    if(typeof(row.id) == "undefined") {
+      $modal.data('id', -1);
+    }
+    else if(row.id >= 0){
+      $modal.data('id', row.id);
+      $modal.find('input[name][type="text"]').each(function () {
+        $(this).val("");
+      });
+    }
+
+    $modal.find('.modal-title').text(title);
+    for (var name in row) {
+      $modal.find('input[name="' + name + '"][type="text"]').val(row[name]);
+    }
+
+    $modal.modal('show');
+  }
+
+
+  /* static */
+  function actionFormatter(value) {
+    return [
+      '<div class="btn-group" role="group">',
+      //'<a class="btn btn-primary btn-xs update" href="javascript:"><i class="fa fa-cog">&nbsp;&nbsp;</i>修改</a>',
+      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
+      '</div>'
+    ].join('');
+  }
+
+  function queryParams(params) {
+    return {
+      page: params.pageNumber,
+      size: params.pageSize,
+      sortName: params.sortName || "updatedAt",
+      sortOrder: params.sortOrder || "desc",
+      search: params.searchText,
+      groupName: groupName,
+      _r: Math.floor(Math.random()*10000)
+    };
+  }
+
+  /* alert */
+  function showAlert(title, type) {
+    $alert.attr('class', 'alert alert-' + type || 'success').html('<i class="fa fa-check"></i> ' + title).show();
+    setTimeout(function(){$alert.hide();}, 3000);
+  }
+
+  /* page formatter */
+  function formatRecordsPerPage(pageNumber) {
+    return '&nbsp;' + pageNumber + ' 每页';
+  }
+
+  function formatShowingRows(pageFrom, pageTo, totalRows) {
+    return '共 ' + totalRows + ' 项记录';
+  }
+
+  function runningFormatter(value, row, index) {
+    return index + 1;
+  }
+  /* page formatter - end */
+
+</script>
+
+
+<#include "../../../../layout/footer.html" >
+

@@ -1,0 +1,531 @@
+<#include "../../layout/header.html" >
+
+<div class="pageheader">
+  <h2><i class="fa fa-tasks"></i>设备</h2>
+  <div class="breadcrumb-wrapper">
+    <ol class="breadcrumb">
+      <li><a href="index.html">设备</a></li>
+      <li>${router.getMac() ?if_exists}</a></li>
+      <li class="active">设置</li>
+    </ol>
+  </div>
+</div>
+
+<!-- main content -->
+<div class="contentpanel">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel">
+        <div class="panel-heading">
+          ${router.getMac() ?if_exists}
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <div class="col-sm-9">
+              <select id="scope" class="select2" data-placeholder="选择域 ..." multiple="multiple">
+                <option value="all">ALL</option>
+                <option value="wan">WAN</option>
+                <option value="lan">LAN</option>
+                <option value="wifi">WiFi</option>
+              </select>
+            </div>
+            <div class="col-sm-3">
+              <input type="button" class="btn btn-success" name="config" value="下发配置" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+    <form id="settings" action="settings" class="form-horizontal" novalidate="novalidate">
+      <div class="panel">
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-sm-9">
+              <h4 class="panel-title">设置</h4>
+            </div>
+            <div class="col-sm-3">
+              <input type="button" class="btn btn-success" name="saveconfig" value="保存配置" />
+              <input type="button" class="btn btn-default" name="refresh" value="刷新" />
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-body">
+          <ul class="nav nav-tabs nav-line">
+            <li class="active"><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
+            <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
+            <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <!-- wan -->
+            <div class="tab-pane active" id="wan">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">协议</label>
+                    <div class="col-sm-7">
+                      <select name="protocol" class="form-control">
+                        <option value="dhcp" selected>DHCP</option>
+                        <option value="static">STATIC</option>
+                        <option value="pppoe">PPPOE</option>
+                        <option value="3g">3/4G</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <!-- static -->
+                  <div class="form-group2" id="static">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">IP</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="address" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">子网掩码</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="netmask" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">网关</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="gateway" class="form-control" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- pppoe -->
+                  <div class="form-group2" id="pppoe">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">用户名</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="username" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">密码</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="password" class="form-control" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 3/4g -->
+                  <div class="form-group2" id="3a4g">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">调制解调器节点</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="modemDevice" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">服务类型</label>
+                      <div class="col-sm-7" class="form-control">
+                        <select name="serviceType" class="form-control">
+                          <option value="auto">自动</option>
+                          <option value="lte_only">仅LTE</option>
+                          <option value="umts_only">仅UMTS(WCDMA)</option>
+                          <option value="gprs_only">仅GPRS</option>
+                          <option value="evdo">CDMA/EV-DO</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">APN</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="APN" class="form-control" />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">Dial Number</label>
+                      <div class="col-sm-7">
+                        <input type="text" name="dialNumber" class="form-control" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- wan -->
+
+            <!-- lan -->
+            <div class="tab-pane" id="lan">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">IP</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="lanAddress" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">子网掩码</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="lanNetmask" class="form-control" />
+                    </div>
+                  </div>
+                  <!-- dhcp -->
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">DHCP</label>
+                    <div class="col-sm-7">
+                      <div class="ckbox ckbox-success ">
+                        <input type="checkbox" id="dhcp" name="dhcp" checked="checked" value="1" />
+                        <label for="dhcp">开启DHCP</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">开始</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="start" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">客户数</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="limit" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">租用时间</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="leaseTime" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!-- lan -->
+
+            <!-- wifi -->
+            <div class="tab-pane" id="wifi">
+              <div class="row">
+                <div class="col-md-10">
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">WiFi</label>
+                    <div class="col-sm-7">
+                      <div class="ckbox ckbox-success ">
+                        <input type="checkbox" id="wifienable" name="wifi" checked="checked" value="1" />
+                        <label for="wifienable">开启WiFi</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">SSID</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="ssid" name="ssid" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">信道</label>
+                    <div class="col-sm-7">
+                      <select  id="channel" name="channel" class="form-control">
+                          <option value="0" selected="selected">auto</option>
+                          <option value="1">2412MHz (Channel 1)</option>
+                          <option value="2">2417MHz (Channel 2)</option>
+                          <option value="3">2422MHz (Channel 3)</option>
+                          <option value="4">2427MHz (Channel 4)</option>
+                          <option value="5">2432MHz (Channel 5)</option>
+                          <option value="6">2437MHz (Channel 6)</option>
+                          <option value="7">2442MHz (Channel 7)</option>
+                          <option value="8">2447MHz (Channel 8)</option>
+                          <option value="9">2452MHz (Channel 9)</option>
+                          <option value="10">2457MHz (Channel 10)</option>
+                          <option value="11">2462MHz (Channel 11)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">最大连接数</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="maxStation" name="maxStation" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">加密</label>
+                    <div class="col-sm-7">
+                      <select  id="encryption" name="encryption" class="form-control">
+                        <option value="none">No Encryption</option>
+                        <option value="open">WEP开放认证</option>
+                        <option value="psk">WPA-PSK</option>
+                        <option value="psk2">WPA2-PSK</option>
+                        <option value="psk-mixed">WPA-PSK/WPA2-PSK Mixed Mode</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" id="wifi-encryption-cipher">
+                    <label class="col-sm-3 control-label">算法</label>
+                    <div class="col-sm-7">
+                      <select id="cipher" name="cipher" class="form-control">
+                        <option value="aes">AES</option>
+                        <option value="tkip">TKIP</option>
+                        <option value="aes+tkip">AES+TKIP</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group" id="wifi-encryption-key">
+                    <label class="col-sm-3 control-label">密码</label>
+                    <div class="col-sm-7">
+                      <input type="text" id="key" name="key" class="form-control" />
+                    </div>
+                  </div>
+                  <input type="hidden" name="_csrf" value="${_csrf.token ?if_exists}" />
+                </div>
+              </div>
+            </div><!-- wifi -->
+          </div><!-- Tab panes -->
+        </div>
+      </div><!-- panel -->
+    </form>
+    </div><!-- col-md-6 -->
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  var routerId = "${router.getId() ?if_exists}";
+  var ROUTER_SETTINGS_URL = "${viewHelper.getPath()}/device/ap/" + routerId + "/settings/show";
+  var ROUTER_SETTINGS_SAVE_URL = "${viewHelper.getPath()}/device/ap/" + routerId + "/settings/save";
+  var ROUTER_SETTINGS_CONFIG_URL = "${viewHelper.getPath()}/device/ap/" + routerId + "/settings/config";
+
+  $("#scope").select2({width: '100%'});
+
+  $(function() {
+    loadSettings();
+
+    $("input[name='refresh']").click(function() {
+      loadSettings();
+    })
+
+    $("input[name='saveconfig']").click(function() {
+      $.ajax({
+        url: ROUTER_SETTINGS_SAVE_URL,
+        type: "post",
+        data: $("#settings").serialize(),
+        success: function(result) {
+          popMessage("success", "配置保存成功");
+        },
+        error: function() {
+          popMessage("danger", "配置保存失败");
+        }
+      });
+    })
+
+    $("input[name='config']").click(function() {
+      if($("#scope").val() == '') {
+        return;
+      }
+
+      $.ajax({
+        url: ROUTER_SETTINGS_CONFIG_URL,
+        type: "post",
+        data: "scope=" + $("#scope").val() + "&_csrf=" + $("input[name='_csrf']").val(),
+        success: function(result) {
+          popMessage("success", "配置下发成功")
+        },
+        error: function() {
+          popMessage("danger", "配置下发失败");
+        }
+      });
+    })
+
+    //wan
+    $("select[name='protocol']").change(function() {
+      switch($("select[name='protocol']").val()) {
+        case "dhcp":
+          $("#pppoe").hide();
+          $("#static").hide();
+          $("#3a4g").hide();
+          break;
+
+        case "static":
+          $("#static").show();
+          $("#pppoe").hide();
+          $("#3a4g").hide();
+          break;
+
+        case "pppoe":
+          $("#static").hide();
+          $("#pppoe").show();
+          $("#3a4g").hide();
+          break;
+
+        case "3g":
+          $("#pppoe").hide();
+          $("#static").hide();
+          $("#3a4g").show();
+          break;
+
+        default:
+          break;
+      }
+    })
+
+    //wifi
+    $("select[name='encryption']").change(function(){
+
+      switch($("select[name='encryption']").val()) {
+        case "none":
+          $("#wifi-encryption-cipher").hide();
+          $("#wifi-encryption-key").hide();
+          break;
+
+        case "open":
+          $("#wifi-encryption-cipher").hide();
+          $("#wifi-encryption-key").show();
+          break;
+
+        case "psk":
+          /* pass through */
+
+        case "psk2":
+          /* pass through */
+
+        case "psk-mixed":
+          $("#wifi-encryption-cipher").show();
+          $("#wifi-encryption-key").show();
+          break;
+
+        default:
+          break;
+      }
+    })
+
+  })
+
+  function loadSettings() {
+    $.ajax({
+      cache: false,
+      url: ROUTER_SETTINGS_URL,
+      type: "get",
+      success: function(result) {
+        processSettings(result);
+      },
+      error: function() {
+        popMessage("danger", "获取信息失败");
+      }
+    });
+  }
+
+  function processSettings(result) {
+    processSettingsWan(result.wan);
+    processSettingsLan(result.lan);
+    processSettingsWiFi(result.wifi);
+  }
+
+  function processSettingsWiFi(wifi) {
+
+    if(!wifi) {
+      return;
+    }
+
+    if(wifi.wifi == 0) {
+      $("input[name='wifi']").prop("checked", false);
+    }
+    else {
+      $("input[name='wifi']").prop("checked", true);
+    }
+
+    $("input[name='ssid']").val(wifi.ssid);
+    $("select[name='channel']").val(wifi.channel);
+    $("input[name='maxStation']").val(wifi.maxStation);
+    $("select[name='encryption']").val(wifi.encryption);
+    $("select[name='cipher']").val(wifi.cipher);
+    $("input[name='key']").val(wifi.key);
+
+    $("select[name='encryption']").change();
+  }
+
+  function processSettingsLan(lan) {
+
+    if(!lan) {
+      return;
+    }
+
+    $("input[name='lanAddress']").val(lan.lanAddress);
+    $("input[name='lanNetmask']").val(lan.lanNetmask);
+
+    if(lan.dhcp == 0) {
+      $("#dhcp").prop("checked", false);
+    }
+    else {
+      $("#dhcp").prop("checked", true);
+    }
+
+    $("input[name='start']").val(lan.start);
+    $("input[name='limit']").val(lan.limit);
+    $("input[name='leaseTime']").val(lan.leaseTime);
+  }
+
+  function processSettingsWan(wan) {
+
+    if(!wan || !wan.protocol) {
+      return;
+    }
+
+    $("select[name='protocol']").val(wan.protocol);
+
+    /* static */
+    $("input[name='address']").val(wan.address);
+    $("input[name='netmask']").val(wan.netmask);
+    $("input[name='gateway']").val(wan.gateway);
+
+    /* pppoe */
+    $("input[name='username']").val(wan.username);
+    $("input[name='password']").val(wan.password);
+
+    /* 3g */
+    $("input[name='modemDevice']").val(wan.modemDevice);
+    $("select[name='serviceType']").val(wan.serviceType);
+    $("input[name='APN']").val(wan.APN);
+    $("input[name='dialNumber']").val(wan.dialNumber);
+
+    $("select[name='protocol']").change();
+  }
+
+  function popMessage(type, msg) {
+    var msgClassName;
+
+    switch(type) {
+
+      case "primary":
+        msgClassName = "growl-primary";
+        break;
+
+      case "success":
+        msgClassName = "growl-success";
+        break;
+
+      case "warning":
+        msgClassName = "growl-warning";
+        break;
+
+      case "danger":
+        msgClassName = "growl-danger";
+        break;
+
+      case "info":
+        msgClassName = "growl-info";
+        break;
+
+      default:
+        msgClassName = "growl-primary";
+        break;
+    }
+
+    $.gritter.add({
+      text: msg,
+      class_name: msgClassName,
+      sticky: false,
+      time: ''
+    });
+  }
+
+</script>
+
+<#include "../../layout/footer.html" >
