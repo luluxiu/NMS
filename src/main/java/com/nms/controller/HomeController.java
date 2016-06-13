@@ -45,18 +45,13 @@ public class HomeController {
     @RequestMapping(value="/login", method = GET)
     public String login(Model model,
                         @RequestParam(value="error", required = false) String error,
-                        @RequestParam(value="logout", required = false) String logout,
-                        @RequestParam(value="profile", required = false) String password) {
+                        @RequestParam(value="logout", required = false) String logout) {
         if(error != null) {
             model.addAttribute("msg", "error");
         }
 
         if(logout != null) {
             model.addAttribute("msg", "logout");
-        }
-
-        if(password != null) {
-            model.addAttribute("msg", "password");
         }
 
         return "login";
