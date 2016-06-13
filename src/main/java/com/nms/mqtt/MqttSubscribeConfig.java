@@ -39,6 +39,15 @@ public class MqttSubscribeConfig {
     @Value("${spring.mqtt.clientid-sub}")
     private String clientid;
 
+    @Value("${spring.mqtt.topic.sub.deviceStatus}")
+    public String topicSubDeviceStatus;
+
+    @Value("${spring.mqtt.topic.sub.SYS.disconnected}")
+    public String topicSubSYSDisconnected;
+
+    @Value("${spring.mqtt.topic.sub.SYS.connected}")
+    public String topicSubSYSConnected;
+
     @Bean
     public MqttPahoClientFactory mqttInBoundClientFactory() {
 
@@ -61,7 +70,7 @@ public class MqttSubscribeConfig {
     public MessageProducer statusInbound() {
 
         adapter = new MqttPahoMessageDrivenChannelAdapter(clientid,
-                mqttInBoundClientFactory(), "device/ap/status/id/#");
+                mqttInBoundClientFactory(), topicSubDeviceStatus);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -91,7 +100,7 @@ public class MqttSubscribeConfig {
     public MessageProducer sysInbound() {
 
         adapter = new MqttPahoMessageDrivenChannelAdapter(clientid + "-sys-disc", mqttInBoundClientFactory(),
-                "$SYS/brokers/emqttd@127.0.0.1/clients/+/disconnected");
+                topicSubSYSDisconnected);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);
@@ -121,7 +130,7 @@ public class MqttSubscribeConfig {
     public MessageProducer sysConnInbound() {
 
         adapter = new MqttPahoMessageDrivenChannelAdapter(clientid + "-sys-conn", mqttInBoundClientFactory(),
-                "$SYS/brokers/emqttd@127.0.0.1/clients/+/connected");
+                topicSubSYSConnected);
         adapter.setCompletionTimeout(5000);
         adapter.setConverter(new DefaultPahoMessageConverter());
         adapter.setQos(1);

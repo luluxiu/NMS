@@ -134,13 +134,13 @@ public class NMSJsonBuilder {
             root = mapper.createObjectNode();
 
             node = WANJsonBuilder(router.getWan());
-            root.put("wan", node);
+            root.put("wan", node.get("wan"));
 
             node = LANJsonBuilder(router.getLan());
-            root.put("lan", node);
+            root.put("lan", node.get("lan"));
 
             node = WiFiJsonBuilder(router.getWifi());
-            root.put("wifi", node);
+            root.put("wifi", node.get("wifi"));
 
             root.put("scope", "all");
         }
@@ -161,13 +161,13 @@ public class NMSJsonBuilder {
             root = mapper.createObjectNode();
 
             node = WANJsonBuilder(DTOUtil.map(group.getWan(), DeviceRouterSettingsWAN.class));
-            root.put("wan", node);
+            root.put("wan", node.get("wan"));
 
             node = LANJsonBuilder(DTOUtil.map(group.getLan(), DeviceRouterSettingsLAN.class));
-            root.put("lan", node);
+            root.put("lan", node.get("lan"));
 
             node = WiFiJsonBuilder(DTOUtil.map(group.getWifi(), DeviceRouterSettingsWiFi.class));
-            root.put("wifi", node);
+            root.put("wifi", node.get("wifi"));
 
             root.put("scope", "all");
         }
@@ -189,17 +189,17 @@ public class NMSJsonBuilder {
 
             if(contains(scope, "wan") >= 0) {
                 node = WANJsonBuilder(router.getWan());
-                root.put("wan", node);
+                root.put("wan", node.get("wan"));
             }
 
             if(contains(scope, "lan") >= 0) {
                 node = LANJsonBuilder(router.getLan());
-                root.put("lan", node);
+                root.put("lan", node.get("lan"));
             }
 
             if(contains(scope, "wifi") >= 0) {
                 node = WiFiJsonBuilder(router.getWifi());
-                root.put("wifi", node);
+                root.put("wifi", node.get("wifi"));
             }
 
             root.put("scope", "all");
@@ -222,17 +222,17 @@ public class NMSJsonBuilder {
 
             if(contains(scope, "wan") >= 0) {
                 node = WANJsonBuilder(DTOUtil.map(group.getWan(), DeviceRouterSettingsWAN.class));
-                root.put("wan", node);
+                root.put("wan", node.get("wan"));
             }
 
             if(contains(scope, "lan") >= 0) {
                 node = LANJsonBuilder(DTOUtil.map(group.getLan(), DeviceRouterSettingsLAN.class));
-                root.put("lan", node);
+                root.put("lan", node.get("lan"));
             }
 
             if(contains(scope, "wifi") >= 0) {
                 node = WiFiJsonBuilder(DTOUtil.map(group.getWifi(), DeviceRouterSettingsWiFi.class));
-                root.put("wifi", node);
+                root.put("wifi", node.get("wifi"));
             }
             root.put("scope", "all");
         }

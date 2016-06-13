@@ -76,41 +76,8 @@ jQuery(document).ready(function() {
    jQuery('.toggle-chat1').toggles({on: false});
 
    var scColor1 = '#428BCA';
-   if (jQuery.cookie('change-skin') && jQuery.cookie('change-skin') == 'bluenav') {
-      scColor1 = '#fff';
-   }
 
 
-   // Sparkline
-   jQuery('#sidebar-chart').sparkline([4,3,3,1,4,3,2,2,3,10,9,6], {
-	 type: 'bar',
-	 height:'30px',
-         barColor: scColor1
-   });
-
-   jQuery('#sidebar-chart2').sparkline([1,3,4,5,4,10,8,5,7,6,9,3], {
-	  type: 'bar',
-	  height:'30px',
-         barColor: '#D9534F'
-   });
-
-   jQuery('#sidebar-chart3').sparkline([5,9,3,8,4,10,8,5,7,6,9,3], {
-	  type: 'bar',
-	  height:'30px',
-         barColor: '#1CAF9A'
-   });
-
-   jQuery('#sidebar-chart4').sparkline([4,3,3,1,4,3,2,2,3,10,9,6], {
-	  type: 'bar',
-	  height:'30px',
-         barColor: scColor1
-   });
-
-   jQuery('#sidebar-chart5').sparkline([1,3,4,5,4,10,8,5,7,6,9,3], {
-	  type: 'bar',
-	  height:'30px',
-      barColor: '#F0AD4E'
-   });
 
 
    // Minimize Button in Panels
@@ -266,7 +233,7 @@ jQuery(document).ready(function() {
             }
 
             jQuery('.nav-horizontal').css({display: 'block'})
-                                  .addClass('nav-pills nav-stacked nav-bracket');
+                .addClass('nav-pills nav-stacked nav-bracket');
 
             jQuery('.nav-horizontal .children').removeClass('dropdown-menu');
             jQuery('.nav-horizontal > li').each(function() {
@@ -288,7 +255,7 @@ jQuery(document).ready(function() {
             if(jQuery('.leftpanel .nav-horizontal').length > 0) {
 
                jQuery('.nav-horizontal').removeClass('nav-pills nav-stacked nav-bracket')
-                                        .appendTo('.topnav');
+                   .appendTo('.topnav');
                jQuery('.nav-horizontal .children').addClass('dropdown-menu').removeAttr('style');
                jQuery('.nav-horizontal li:last-child').show();
                jQuery('.searchform').removeClass('searchform').appendTo('.nav-horizontal li:last-child .dropdown-menu');
@@ -308,40 +275,7 @@ jQuery(document).ready(function() {
 
       }
    }
-
-
-   // Sticky Header
-   if(jQuery.cookie('sticky-header'))
-      jQuery('body').addClass('stickyheader');
-
-   // Sticky Left Panel
-   if(jQuery.cookie('sticky-leftpanel')) {
-      jQuery('body').addClass('stickyheader');
-      jQuery('.leftpanel').addClass('sticky-leftpanel');
-   }
-
-   // Left Panel Collapsed
-   if(jQuery.cookie('leftpanel-collapsed')) {
-      jQuery('body').addClass('leftpanel-collapsed');
-      jQuery('.menutoggle').addClass('menu-collapsed');
-   }
-
-   // Changing Skin
-   var c = jQuery.cookie('change-skin');
-   var cssSkin = 'css/style.'+c+'.css';
-   if (jQuery('body').css('direction') == 'rtl') {
-      cssSkin = '../css/style.'+c+'.css';
-      jQuery('html').addClass('rtl');
-   }
-   if(c) {
-      jQuery('head').append('<link id="skinswitch" rel="stylesheet" href="'+cssSkin+'" />');
-   }
-
-   // Changing Font
-   var fnt = jQuery.cookie('change-font');
-   if(fnt) {
-      jQuery('head').append('<link id="fontswitch" rel="stylesheet" href="css/font.'+fnt+'.css" />');
-   }
+   
 
    // Check if leftpanel is collapsed
    if(jQuery('body').hasClass('leftpanel-collapsed'))
@@ -354,30 +288,12 @@ jQuery(document).ready(function() {
    });
 
 
-   // This is not actually changing color of btn-primary
-   // This is like you are changing it to use btn-orange instead of btn-primary
-   // This is for demo purposes only
-   var c = jQuery.cookie('change-skin');
-   if (c && c == 'greyjoy') {
-      $('.btn-primary').removeClass('btn-primary').addClass('btn-orange');
-      $('.rdio-primary').addClass('rdio-default').removeClass('rdio-primary');
-      $('.text-primary').removeClass('text-primary').addClass('text-orange');
-   }
-
 
    /* MESSAGE BOX */
    $(".mb-control").on("click",function(){
       var box = $($(this).data("box"));
       if(box.length > 0){
          box.toggleClass("open");
-
-         var sound = box.data("sound");
-
-         if(sound === 'alert')
-            playAudio('alert');
-
-         if(sound === 'fail')
-            playAudio('fail');
 
       }
       return false;

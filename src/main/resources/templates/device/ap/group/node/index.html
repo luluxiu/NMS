@@ -60,7 +60,7 @@
              data-show-columns="true" data-striped="true" data-show-toggle="true"
              data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
              data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
-             data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+             data-search='true' data-search-time-out='500' data-trim-on-search='true'
              data-search-on-enter-key='true'>
         <thead>
         <th data-formatter="runningFormatter">No.</th>
@@ -141,6 +141,8 @@
     groupName = "${group.getName()}";
   </#if>
 
+  var GROUP_CONFIG_URL = "${viewHelper.getPath()}/device/ap/group/" + groupName + "/config";
+
   $("input[name='groupName']").val(groupName);
   $("#scope").select2({width: '100%'});
   var $alert = $('.alert').hide();
@@ -164,7 +166,7 @@
   });
 
   $.validator.addMethod("BigOne", function(value, element, param) {
-    if(value.toLocaleLowerCase() < $("#startMac").val().toLocaleLowerCase()) {
+    if(value.toLocaleLowerCase() < $("#start").val().toLocaleLowerCase()) {
       return false;
     }
     else {
@@ -188,11 +190,11 @@
       rules: {
         start: {
           required: true,
-          isMACAddr: true
+          MACAddr: true
         },
         end:  {
           required: true,
-          isMACAddr: true,
+          MACAddr: true,
           BigOne: true
         },
         description:  {
@@ -247,6 +249,24 @@
         }
       });
     });
+
+    $("input[name='template']").click(function() {
+      if($("#scope").val() == null || $("#scope").val() == '') {
+        return false;
+      }
+
+      $.ajax({
+        url: GROUP_CONFIG_URL,
+        type: "post",
+        data: "scope=" + $("#scope").val() + "&_csrf=" + _csrf,
+        success: function(result) {
+          popMessage("success", "配置下发成功")
+        },
+        error: function() {
+          popMessage("danger", "配置下发失败");
+        }
+      });
+    })
 
   });
 
@@ -313,6 +333,44 @@
       '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
       '</div>'
     ].join('');
+  }
+
+  function popMessage(type, msg) {
+    var msgClassName;
+
+    switch(type) {
+
+      case "primary":
+        msgClassName = "growl-primary";
+        break;
+
+      case "success":
+        msgClassName = "growl-success";
+        break;
+
+      case "warning":
+        msgClassName = "growl-warning";
+        break;
+
+      case "danger":
+        msgClassName = "growl-danger";
+        break;
+
+      case "info":
+        msgClassName = "growl-info";
+        break;
+
+      default:
+        msgClassName = "growl-primary";
+        break;
+    }
+
+    $.gritter.add({
+      text: msg,
+      class_name: msgClassName,
+      sticky: false,
+      time: ''
+    });
   }
 
   function queryParams(params) {

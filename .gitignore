@@ -29,6 +29,8 @@ $RECYCLE.BIN/
 .LSOverride
 build
 .idea
+logs
+.gradle
 
 # Thumbnails
 ._*

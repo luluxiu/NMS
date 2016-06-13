@@ -34,11 +34,13 @@ public class HomeController {
 
     private static Logger logger = LoggerFactory.getLogger(DeviceRouterController.class);
 
+
     @RequestMapping(value = "", method = GET)
     public String index() {
 
-        return "login";
+        return "redirect:device/ap";
     }
+
 
     @RequestMapping(value="/login", method = GET)
     public String login(Model model,

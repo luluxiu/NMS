@@ -4,7 +4,7 @@
   <h2><i class="fa fa-tasks"></i>设备</h2>
   <div class="breadcrumb-wrapper">
     <ol class="breadcrumb">
-      <li><a href="index.html">设备</a></li>
+      <li><a href="${viewHelper.getPath()}/device/ap">设备</a></li>
       <li>${router.getMac() ?if_exists}</a></li>
       <li class="active">设置</li>
     </ol>
@@ -127,7 +127,7 @@
                     </div>
                     <div class="form-group">
                       <label class="col-sm-3 control-label">服务类型</label>
-                      <div class="col-sm-7" class="form-control">
+                      <div class="col-sm-7 form-control">
                         <select name="serviceType" class="form-control">
                           <option value="auto">自动</option>
                           <option value="lte_only">仅LTE</option>
@@ -300,39 +300,39 @@
 
     $("input[name='refresh']").click(function() {
       loadSettings();
-    })
+    });
 
     $("input[name='saveconfig']").click(function() {
       $.ajax({
         url: ROUTER_SETTINGS_SAVE_URL,
         type: "post",
         data: $("#settings").serialize(),
-        success: function(result) {
+        success: function() {
           popMessage("success", "配置保存成功");
         },
         error: function() {
           popMessage("danger", "配置保存失败");
         }
       });
-    })
+    });
 
     $("input[name='config']").click(function() {
-      if($("#scope").val() == '') {
-        return;
+      if($("#scope").val() == null || $("#scope").val() == '') {
+        return false;
       }
 
       $.ajax({
         url: ROUTER_SETTINGS_CONFIG_URL,
         type: "post",
         data: "scope=" + $("#scope").val() + "&_csrf=" + $("input[name='_csrf']").val(),
-        success: function(result) {
+        success: function() {
           popMessage("success", "配置下发成功")
         },
         error: function() {
           popMessage("danger", "配置下发失败");
         }
       });
-    })
+    });
 
     //wan
     $("select[name='protocol']").change(function() {
@@ -364,7 +364,7 @@
         default:
           break;
       }
-    })
+    });
 
     //wifi
     $("select[name='encryption']").change(function(){
@@ -396,7 +396,7 @@
       }
     })
 
-  })
+  });
 
   function loadSettings() {
     $.ajax({

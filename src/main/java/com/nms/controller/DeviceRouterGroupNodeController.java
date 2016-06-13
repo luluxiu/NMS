@@ -13,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
+
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -73,7 +75,10 @@ public class DeviceRouterGroupNodeController {
         Page<DeviceRouterGroupNode> nodes = null;
         DeviceRouterGroupNode node = null;
 
-        if(groupName != null && groupName.length() != 0) {
+
+
+        if(groupName != null && groupName.length() != 0 &&
+                (search == null || search.length() == 0)) {
             DeviceRouterGroup group = deviceRouterGroupService.findOneByName(groupName);
             if(group != null) {
                 nodes = deviceRouterGroupNodeService.findAllByGroup(pb, group);
@@ -90,8 +95,10 @@ public class DeviceRouterGroupNodeController {
             }
             else {
                 node.setGroupName(node.getGroup().getName());
+                ArrayList<DeviceRouterGroupNode> tmp = new ArrayList<>();
+                tmp.add(node);
                 model.addAttribute("total", 1);
-                model.addAttribute("rows", node);
+                model.addAttribute("rows", tmp);
             }
         }
         else {
