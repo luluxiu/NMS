@@ -119,7 +119,7 @@ public class HomeController {
 
         logger.debug("====== it is life");
         /*   */
-        model.addAttribute("msg", "profile");
+        model.addAttribute("msg", "logout");
 
         return "portal";
     }
