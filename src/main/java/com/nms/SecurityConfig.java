@@ -43,7 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/fonts/**",
                 "/js/**",
                 "/images/**",
-                "/error/**");
+                "/error/**",
+                "/device/ap/group/node/g");
     }
 
     @Override
