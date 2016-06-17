@@ -1,14 +1,8 @@
 package com.nms.service;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.nms.bean.PageBean;
-import com.nms.bean.TemplateLanBean;
-import com.nms.bean.TemplateWanBean;
-import com.nms.bean.TemplateWifiBean;
-import com.nms.model.DeviceRouter;
-import com.nms.model.DeviceRouterSettingsLAN;
-import com.nms.model.DeviceRouterSettingsWAN;
-import com.nms.model.DeviceRouterSettingsWiFi;
+import com.nms.bean.*;
+import com.nms.model.*;
 import com.nms.repository.DeviceRouterRepository;
 import com.nms.service.support.MqttMsgSender;
 import com.nms.service.support.NMSJsonBuilder;
@@ -81,12 +75,37 @@ public class DeviceRouterService {
     }
 
     public void save(DeviceRouter router,
-                     TemplateWanBean wan, TemplateLanBean lan, TemplateWifiBean wifi) {
+                     TemplateWanBean wan, TemplateLanBean lan,
+                     TemplateWifiBean wifi, TemplateOTABean ota) {
 
+        if(router.getWan() == null) {
+            router.setWan(DTOUtil.map(wan, DeviceRouterSettingsWAN.class));
+        }
+        else {
+            DTOUtil.mapTo(wan, router.getWan());
+        }
 
-        DTOUtil.mapTo(wan, router.getWan());
-        DTOUtil.mapTo(lan, router.getLan());
-        DTOUtil.mapTo(wifi, router.getWifi());
+        if(router.getLan() == null) {
+            router.setLan(DTOUtil.map(lan, DeviceRouterSettingsLAN.class));
+        }
+        else {
+            DTOUtil.mapTo(lan, router.getLan());
+        }
+
+        if(router.getWifi() == null) {
+            router.setWifi(DTOUtil.map(wifi, DeviceRouterSettingsWiFi.class));
+        }
+        else {
+            DTOUtil.mapTo(wifi, router.getWifi());
+        }
+
+        if(router.getOta() == null) {
+            router.setOta(DTOUtil.map(ota, DeviceRouterSettingsOTA.class));
+        }
+        else {
+            DTOUtil.mapTo(ota, router.getOta());
+        }
+
 
         routerRepository.save(router);
     }
@@ -121,6 +140,10 @@ public class DeviceRouterService {
         }
         else if(sc[0].equalsIgnoreCase("wifi")) {       /* topic - wifi */
             node = NMSJsonBuilder.WiFiJsonBuilder(router.getWifi());
+            mqttMsgSender.MqttMsgRouterSingleSetup(router.getMac(), node.toString());
+        }
+        else if(sc[0].equalsIgnoreCase("ota")) {       /* topic - ota */
+            node = NMSJsonBuilder.OTAJsonBuilder(router.getOta());
             mqttMsgSender.MqttMsgRouterSingleSetup(router.getMac(), node.toString());
         }
     }

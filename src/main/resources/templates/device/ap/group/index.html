@@ -29,6 +29,7 @@
           <th data-field="groupWanName" data-align="center" >WAN 模板</th>
           <th data-field="groupLanName" data-align="center" >LAN 模板</th>
           <th data-field="groupWifiName" data-align="center" >WiFi 模板</th>
+          <th data-field="groupOTAName" data-align="center" >OTA 模板</th>
           <th data-field="description" data-align="center" data-visible="false">描述</th>
           <th data-field="updatedAt" data-align="center" data-visible="true" data-sortable="true"
             data-sort-order="desc">更新时间</th>
@@ -57,6 +58,8 @@
                       <input type="text" class="form-control" name="name" id="name" >
                     </div>
                   </div>
+
+                  <!-- wan -->
                   <div class="form-group">
                     <label class="col-md-3 control-label">模板WAN : </label>
                     <div class="col-md-7">
@@ -74,6 +77,8 @@
                       </select>
                     </div>
                   </div>
+
+                  <!-- lan -->
                   <div class="form-group">
                     <label class="col-md-3 control-label">模板LAN : </label>
                     <div class="col-md-7">
@@ -91,6 +96,8 @@
                       </select>
                     </div>
                   </div>
+
+                  <!-- wifi -->
                   <div class="form-group">
                     <label class="col-md-3 control-label">模板WiFi : </label>
                     <div class="col-md-7">
@@ -108,6 +115,26 @@
                       </select>
                     </div>
                   </div>
+
+                  <!-- ota -->
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">模板OTA : </label>
+                    <div class="col-md-7">
+                      <select name="groupOTAName" class="selectpicker show-menu-arrow form-control" data-size="6"
+                              data-live-search="true"  title="选择模板 ..." >
+                        <#if otas ??>
+                          <#list otas as ota>
+                            <option value="${ota.getTemplateName()}">${ota.getTemplateName()}</option>
+                            <#else>
+                              <option>目前还没有模板</option>
+                          </#list>
+                          <#else>
+                            <option>目前还没有模板</option>
+                        </#if>
+                      </select>
+                    </div>
+                  </div>
+
                   <div class="form-group">
                     <label class="col-md-3 control-label">描述 : </label>
                     <div class="col-md-7">
@@ -118,7 +145,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-primary submit">提交</button>
+                  <button type="button" class="btn btn-success submit">提交</button>
                 </div>
               </form>
             </div><!-- /.modal-content -->
@@ -234,6 +261,7 @@
         groupWanName: '',
         groupLanName: '',
         groupWifiName: '',
+        groupOTAName: '',
         description: ''
       };
 
@@ -261,6 +289,9 @@
     $('select[name="groupWifiName"]').val(row['groupWifiName']);
     $('select[name="groupWifiName"]').selectpicker('render');
 
+    $('select[name="groupOTAName"]').val(row['groupOTAName']);
+    $('select[name="groupOTAName"]').selectpicker('render');
+
     $modal.modal('show');
   }
 
@@ -272,7 +303,7 @@
 
     return [
       '<div class="btn-group" role="group">',
-      '<a class="btn btn-default btn-xs" href="'+config+'" target="_blank"><i class="fa fa-cog">&nbsp;&nbsp;</i>配置</a>',
+      '<a class="btn btn-default btn-xs" href="'+config+'" target="_blank"><i class="fa fa-cog">&nbsp;&nbsp;</i>查看</a>',
       '<a class="btn btn-default btn-xs" href="'+node+'"><i class="fa fa-info">&nbsp;&nbsp;</i>节点</a>',
       '<a class="btn btn-default btn-xs update" href="javascript:"><i class="fa fa-pencil">&nbsp;&nbsp;</i>修改</a>',
       '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',

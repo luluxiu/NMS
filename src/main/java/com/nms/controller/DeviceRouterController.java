@@ -1,9 +1,6 @@
 package com.nms.controller;
 
-import com.nms.bean.PageBean;
-import com.nms.bean.TemplateLanBean;
-import com.nms.bean.TemplateWanBean;
-import com.nms.bean.TemplateWifiBean;
+import com.nms.bean.*;
 import com.nms.model.DeviceRouter;
 import com.nms.model.DeviceRouterSettingsLAN;
 import com.nms.model.DeviceRouterSettingsWAN;
@@ -35,7 +32,7 @@ public class DeviceRouterController {
     private static Logger logger = LoggerFactory.getLogger(DeviceRouterController.class);
 
     /* get device index.html */
-    @RequestMapping(value="ap", method = GET)
+    @RequestMapping(value = "ap", method = GET)
     private String index(Model model) {
         model.addAttribute("menu", "menuDevice");
 
@@ -173,6 +170,8 @@ public class DeviceRouterController {
                 model.addAttribute("lan", router.getLan());
                 Hibernate.initialize(router.getWifi());
                 model.addAttribute("wifi", router.getWifi());
+                Hibernate.initialize(router.getOta());
+                model.addAttribute("ota", router.getOta());
             }
         }
         else {
@@ -186,7 +185,8 @@ public class DeviceRouterController {
 
     @RequestMapping(value="ap/{id}/settings/save", method = POST)
     public String save(Model model, @PathVariable(value = "id") Long id,
-                       TemplateWanBean wan, TemplateLanBean lan, TemplateWifiBean wifi) {
+                       TemplateWanBean wan, TemplateLanBean lan,
+                       TemplateWifiBean wifi, TemplateOTABean ota) {
 
         DeviceRouter router = deviceRouterService.findOne(id);
         if(router == null) {
@@ -194,7 +194,7 @@ public class DeviceRouterController {
             model.addAttribute("result", "error");
         }
         else {
-            deviceRouterService.save(router, wan, lan, wifi);
+            deviceRouterService.save(router, wan, lan, wifi, ota);
             logger.debug("====== saved ");
             model.addAttribute("result", "success");
         }

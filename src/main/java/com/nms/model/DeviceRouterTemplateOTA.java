@@ -16,6 +16,22 @@ import java.util.Collection;
 @JsonIgnoreProperties(ignoreUnknown = true, value={"group", "hibernateLazyInitializer", "handler"})
 public class DeviceRouterTemplateOTA extends BaseModel {
 
+    @Column(nullable = false)
+    private int mode;
+
+    @Column(length = 128, nullable = false)
+    private String server;
+
+    @Column(nullable = false)
+    private int pridDelay;
+
+    @Column(nullable = false)
+    private int restoreFlag;
+
+    private int windowStart;
+
+    private int windowSize;
+
     /* template */
 
     @Column(length = 32)

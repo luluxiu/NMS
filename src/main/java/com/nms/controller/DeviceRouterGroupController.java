@@ -3,10 +3,7 @@ package com.nms.controller;
 import com.nms.bean.PageBean;
 import com.nms.bean.RouterGroupBean;
 import com.nms.model.*;
-import com.nms.service.DeviceRouterGroupService;
-import com.nms.service.DeviceRouterLANService;
-import com.nms.service.DeviceRouterWANService;
-import com.nms.service.DeviceRouterWiFiService;
+import com.nms.service.*;
 import com.nms.utils.DTOUtil;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,16 +37,21 @@ public class DeviceRouterGroupController {
     @Autowired
     private DeviceRouterWiFiService deviceRouterWiFiService;
 
+    @Autowired
+    private DeviceRouterOTAService deviceRouterOTAService;
+
     @RequestMapping(value = "", method = GET)
     public String index(Model model) {
         List<DeviceRouterTemplateWAN> wan = deviceRouterWANService.findAll();
         List<DeviceRouterTemplateLAN> lan = deviceRouterLANService.findAll();
         List<DeviceRouterTemplateWiFi> wifi = deviceRouterWiFiService.findAll();
+        List<DeviceRouterTemplateOTA> ota = deviceRouterOTAService.findAll();
 
         model.addAttribute("menu", "menuGroupList");
         model.addAttribute("wans", wan);
         model.addAttribute("lans", lan);
         model.addAttribute("wifis", wifi);
+        model.addAttribute("otas", ota);
 
         return "device/ap/group/index";
     }
@@ -136,8 +138,11 @@ public class DeviceRouterGroupController {
         }
 
         DTOUtil.mapTo(group, g);
-        deviceRouterGroupService.update(g, group.getGroupWanName(),
-                group.getGroupLanName(), group.getGroupWifiName());
+        deviceRouterGroupService.update(g,
+                                        group.getGroupWanName(),
+                                        group.getGroupLanName(),
+                                        group.getGroupWifiName(),
+                                        group.getGroupOTAName());
         model.addAttribute("result", "success");
 
         return "jsonTemplate";
@@ -209,6 +214,7 @@ public class DeviceRouterGroupController {
             model.addAttribute("wan", group.getWan());
             model.addAttribute("lan", group.getLan());
             model.addAttribute("wifi", group.getWifi());
+            model.addAttribute("ota", group.getOta());
         }
 
         return "jsonTemplate";

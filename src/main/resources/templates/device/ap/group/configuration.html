@@ -24,6 +24,7 @@
             <li class="active"><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
             <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
             <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
+            <li><a href="#ota" data-toggle="tab"><strong>OTA</strong></a></li>
           </ul>
 
           <div class="tab-content">
@@ -50,6 +51,16 @@
 
             <!-- wifi tab-pane -->
             <div class="tab-pane" id="wifi">
+              <div class="row">
+                <div class="col-md-6">
+                  <ul class="list-group groupConfigInfo">
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- ota tab-pane -->
+            <div class="tab-pane" id="ota">
               <div class="row">
                 <div class="col-md-6">
                   <ul class="list-group groupConfigInfo">
@@ -103,32 +114,78 @@
     processConfigWanInfo(result.wan);
     processConfigLanInfo(result.lan);
     processConfigWiFiInfo(result.wifi);
+    processConfigOtaInfo(result.ota);
+  }
+
+  function processConfigOtaInfo(ota) {
+    var dom = "#ota .groupConfigInfo";
+
+    if(!ota) {
+      return;
+    }
+
+    switch(ota.mode) {
+      case 0:
+        appendDom(dom, "模式", "从不检查更新");
+        break;
+
+      case 1:
+        appendDom(dom, "模式", "始终检查更新");
+        break;
+
+      case 2:
+        appendDom(dom, "模式", "在时间窗口内检查更新");
+        break;
+
+      default:
+        appendDom(dom, "模式", ota.mode);
+        break;
+    }
+
+    appendDom(dom, "OTA 服务器地址", ota.server);
+    appendDom(dom, "升级检测间隔", ota.pridDelay + " 分钟");
+
+    if(ota.restoreFlag == 1) {
+      appendDom(dom, "升级后是否还原出厂配置", "是");
+    }
+    else if(ota.restoreFlag == 0) {
+      appendDom(dom, "升级后是否还原出厂配置", "否");
+    }
+    else {
+      appendDom(dom, "升级后是否还原出厂配置", ota.restoreFlag);
+    }
+
+    if(ota.mode == 2) {
+      appendDom(dom, "时间窗口起始时间", ota.windowStart);
+      appendDom(dom, "时间窗口大小", ota.windowSize + " 小时");
+    }
   }
 
   function processConfigWiFiInfo(wifi) {
+    var dom = "#wifi .groupConfigInfo";
 
     if(!wifi) {
       return;
     }
 
     if(wifi.wifi == 1) {
-      appendDom("#wifi .groupConfigInfo", "WiFi", "开启");
+      appendDom(dom, "WiFi", "开启");
     }
     else {
-      appendDom("#wifi .groupConfigInfo", "WiFi", "关闭");
+      appendDom(dom, "WiFi", "关闭");
     }
 
-    appendDom("#wifi .groupConfigInfo", "SSID", wifi.ssid);
-    appendDom("#wifi .groupConfigInfo", "信道", wifi.channel);
-    appendDom("#wifi .groupConfigInfo", "最大连接数", wifi.maxStation);
-    appendDom("#wifi .groupConfigInfo", "加密方式", wifi.encryption);
+    appendDom(dom, "SSID", wifi.ssid);
+    appendDom(dom, "信道", wifi.channel);
+    appendDom(dom, "最大连接数", wifi.maxStation);
+    appendDom(dom, "加密方式", wifi.encryption);
 
     switch(wifi.encryption) {
       case "none":
         break;
 
       case "open":
-        appendDom("#wifi .groupConfigInfo", "密码", wifi.key);
+        appendDom(dom, "密码", wifi.key);
         break;
 
       case "psk":
@@ -138,61 +195,63 @@
         /* pass through */
 
       case "psk-mixed":
-        appendDom("#wifi .groupConfigInfo", "算法", wifi.cipher);
-        appendDom("#wifi .groupConfigInfo", "密码", wifi.key);
+        appendDom(dom, "算法", wifi.cipher);
+        appendDom(dom, "密码", wifi.key);
         break;
     }
   }
 
 
   function processConfigLanInfo(lan) {
+    var dom = "#lan .groupConfigInfo";
 
     if(!lan) {
       return;
     }
 
-    appendDom("#lan .groupConfigInfo", "IP", lan.lanAddress);
-    appendDom("#lan .groupConfigInfo", "子网掩码", lan.lanNetmask);
+    appendDom(dom, "IP", lan.lanAddress);
+    appendDom(dom, "子网掩码", lan.lanNetmask);
 
     if(lan.dhcp == 0) {
-      appendDom("#lan .groupConfigInfo", "DHCP", "关闭");
+      appendDom(dom, "DHCP", "关闭");
       return;
     }
 
-    appendDom("#lan .groupConfigInfo", "DHCP", "开启");
+    appendDom(dom, "DHCP", "开启");
 
-    appendDom("#lan .groupConfigInfo", "开始", lan.start);
-    appendDom("#lan .groupConfigInfo", "客户数", lan.limit);
-    appendDom("#lan .groupConfigInfo", "租用时间", lan.leaseTime);
+    appendDom(dom, "开始", lan.start);
+    appendDom(dom, "客户数", lan.limit);
+    appendDom(dom, "租用时间", lan.leaseTime);
   }
 
   function processConfigWanInfo(wan) {
+    var dom = "#wan .groupConfigInfo";
 
     if(!wan || !wan.protocol) {
       return;
     }
 
-    appendDom("#wan .groupConfigInfo", "模式", wan.protocol);
+    appendDom(dom, "模式", wan.protocol);
     switch(wan.protocol) {
       case "dhcp":
         break;
 
       case "static":
-        appendDom("#wan .groupConfigInfo", "IP", wan.address);
-        appendDom("#wan .groupConfigInfo", "子网掩码", wan.netmask);
-        appendDom("#wan .groupConfigInfo", "网关", wan.gateway);
+        appendDom(dom, "IP", wan.address);
+        appendDom(dom, "子网掩码", wan.netmask);
+        appendDom(dom, "网关", wan.gateway);
         break;
 
       case "pppoe":
-        appendDom("#wan .groupConfigInfo", "用户名", wan.username);
-        appendDom("#wan .groupConfigInfo", "密码", wan.password);
+        appendDom(dom, "用户名", wan.username);
+        appendDom(dom, "密码", wan.password);
         break;
 
       case "3g":
-        appendDom("#wan .groupConfigInfo", "调制解调器节点", wan.modemDevice);
-        appendDom("#wan .groupConfigInfo", "服务类型", wan.serviceType);
-        appendDom("#wan .groupConfigInfo", "APN", wan.APN);
-        appendDom("#wan .groupConfigInfo", "Dial Number", wan.dialNumber);
+        appendDom(dom, "调制解调器节点", wan.modemDevice);
+        appendDom(dom, "服务类型", wan.serviceType);
+        appendDom(dom, "APN", wan.APN);
+        appendDom(dom, "Dial Number", wan.dialNumber);
         break;
 
       default:

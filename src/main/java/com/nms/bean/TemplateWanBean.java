@@ -14,7 +14,7 @@ public class TemplateWanBean {
 
     private Long id = new Long(0);
 
-    @NotBlank
+
     @Length(min = 1, max = 32)
     private String templateName;
 

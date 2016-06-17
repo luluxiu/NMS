@@ -34,6 +34,9 @@ public class DeviceRouterGroupService {
     private DeviceRouterWiFiService deviceRouterWiFiService;
 
     @Autowired
+    private DeviceRouterOTAService deviceRouterOTAService;
+
+    @Autowired
     private MqttMsgSender mqttMsgSender;
 
 
@@ -45,6 +48,7 @@ public class DeviceRouterGroupService {
         DeviceRouterTemplateWAN w = deviceRouterWANService.findOneByTemplateName(g.getGroupWanName());
         DeviceRouterTemplateLAN l = deviceRouterLANService.findOneByTemplateName(g.getGroupLanName());
         DeviceRouterTemplateWiFi wi = deviceRouterWiFiService.findOneByTemplateName(g.getGroupWifiName());
+        DeviceRouterTemplateOTA ota = deviceRouterOTAService.findOneByTemplateName(g.getGroupOTAName());
         DeviceRouterGroup group = new DeviceRouterGroup();
 
         group.setName(g.getName());
@@ -52,6 +56,7 @@ public class DeviceRouterGroupService {
         group.setWan(w);
         group.setLan(l);
         group.setWifi(wi);
+        group.setOta(ota);
         group.setGroupId(IDGenerator.getID());
 
         return deviceRouterGroupRepository.save(group);
@@ -81,18 +86,22 @@ public class DeviceRouterGroupService {
         return deviceRouterGroupRepository.findOne(id);
     }
 
-    public DeviceRouterGroup update(DeviceRouterGroup group, String wan, String lan, String wifi) {
+    public DeviceRouterGroup update(DeviceRouterGroup group, String wan, String lan, String wifi, String ota) {
 
-        if(group.getWan().getTemplateName().equals(wan) == false) {
+        if(group.getWan() == null || group.getWan().getTemplateName().equals(wan) == false) {
             group.setWan(deviceRouterWANService.findOneByTemplateName(wan));
         }
 
-        if(group.getLan().getTemplateName().equals(lan) == false) {
+        if(group.getLan() == null || group.getLan().getTemplateName().equals(lan) == false) {
             group.setLan(deviceRouterLANService.findOneByTemplateName(lan));
         }
 
-        if(group.getWifi().getTemplateName().equals(wifi) == false) {
+        if(group.getWifi() == null || group.getWifi().getTemplateName().equals(wifi) == false) {
             group.setWifi(deviceRouterWiFiService.findOneByTemplateName(wifi));
+        }
+
+        if(group.getOta() == null || group.getOta().getTemplateName().equals(ota) == false) {
+            group.setOta(deviceRouterOTAService.findOneByTemplateName(ota));
         }
 
         return deviceRouterGroupRepository.save(group);
@@ -127,6 +136,10 @@ public class DeviceRouterGroupService {
         }
         else if(sc[0].equalsIgnoreCase("wifi")) {       /* topic - wifi */
             node = NMSJsonBuilder.WiFiJsonBuilder(DTOUtil.map(group.getWifi(), DeviceRouterSettingsWiFi.class));
+            mqttMsgSender.MqttMsgRouterGroupSetup(group.getGroupId(), node.toString());
+        }
+        else if(sc[0].equalsIgnoreCase("ota")) {       /* topic - ota */
+            node = NMSJsonBuilder.OTAJsonBuilder(DTOUtil.map(group.getOta(), DeviceRouterSettingsOTA.class));
             mqttMsgSender.MqttMsgRouterGroupSetup(group.getGroupId(), node.toString());
         }
     }

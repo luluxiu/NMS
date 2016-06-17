@@ -25,6 +25,8 @@ public class DeviceRouterStatus extends BaseModel {
 
     private String wifi;
 
+    private String ota;
+
     private String client;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "status")

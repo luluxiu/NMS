@@ -10,6 +10,11 @@ import com.nms.utils.DTOUtil;
  */
 public class NMSJsonBuilder {
 
+    /**
+     *
+     * @param wan
+     * @return
+     */
     public static ObjectNode WANJsonBuilder(DeviceRouterSettingsWAN wan) {
         ObjectNode      root;
 
@@ -51,7 +56,11 @@ public class NMSJsonBuilder {
         return root;
     }
 
-
+    /**
+     *
+     * @param lan
+     * @return
+     */
     public static ObjectNode LANJsonBuilder(DeviceRouterSettingsLAN lan) {
         ObjectNode      root;
 
@@ -78,7 +87,11 @@ public class NMSJsonBuilder {
         return root;
     }
 
-
+    /**
+     *
+     * @param wifi
+     * @return
+     */
     public static ObjectNode WiFiJsonBuilder(DeviceRouterSettingsWiFi wifi) {
         ObjectNode      root;
 
@@ -123,7 +136,44 @@ public class NMSJsonBuilder {
         return root;
     }
 
+    /**
+     *
+     * @param ota
+     * @return
+     */
+    public static ObjectNode OTAJsonBuilder(DeviceRouterSettingsOTA ota) {
+        ObjectNode      root;
 
+        try {
+            ObjectMapper    mapper = new ObjectMapper();
+            ObjectNode      node = mapper.createObjectNode();
+
+            root = mapper.createObjectNode();
+            root.put("ota", node);
+            root.put("scope", "ota");
+
+            node.put("mode", ota.getMode());
+            node.put("server", ota.getServer());
+            node.put("pridDelay", ota.getPridDelay());
+            node.put("restoreFlag", ota.getRestoreFlag());
+
+            if(ota.getMode() == 2) {
+                node.put("windowStart", ota.getWindowStart());
+                node.put("windowSize", ota.getWindowSize());
+            }
+        }
+        catch (Exception e) {
+            return null;
+        }
+
+        return root;
+    }
+
+    /**
+     *
+     * @param router
+     * @return
+     */
     public static ObjectNode AllJsonBuilder(DeviceRouter router) {
         ObjectNode      root = null;
 
@@ -142,6 +192,9 @@ public class NMSJsonBuilder {
             node = WiFiJsonBuilder(router.getWifi());
             root.put("wifi", node.get("wifi"));
 
+            node = OTAJsonBuilder(router.getOta());
+            root.put("ota", node.get("ota"));
+
             root.put("scope", "all");
         }
         catch (Exception e) {
@@ -151,6 +204,11 @@ public class NMSJsonBuilder {
         return root;
     }
 
+    /**
+     *
+     * @param group
+     * @return
+     */
     public static ObjectNode AllJsonBuilder(DeviceRouterGroup group) {
         ObjectNode      root = null;
 
@@ -169,6 +227,9 @@ public class NMSJsonBuilder {
             node = WiFiJsonBuilder(DTOUtil.map(group.getWifi(), DeviceRouterSettingsWiFi.class));
             root.put("wifi", node.get("wifi"));
 
+            node = OTAJsonBuilder(DTOUtil.map(group.getOta(), DeviceRouterSettingsOTA.class));
+            root.put("ota", node.get("ota"));
+
             root.put("scope", "all");
         }
         catch (Exception e) {
@@ -178,6 +239,12 @@ public class NMSJsonBuilder {
         return root;
     }
 
+    /**
+     *
+     * @param scope
+     * @param router
+     * @return
+     */
     public static ObjectNode AllJsonBuilder(String[] scope, DeviceRouter router) {
         ObjectNode      root = null;
 
@@ -202,6 +269,11 @@ public class NMSJsonBuilder {
                 root.put("wifi", node.get("wifi"));
             }
 
+            if(contains(scope, "ota") >= 0) {
+                node = OTAJsonBuilder(router.getOta());
+                root.put("ota", node.get("ota"));
+            }
+
             root.put("scope", "all");
         }
         catch (Exception e) {
@@ -211,6 +283,12 @@ public class NMSJsonBuilder {
         return root;
     }
 
+    /**
+     *
+     * @param scope
+     * @param group
+     * @return
+     */
     public static ObjectNode AllJsonBuilder(String[] scope, DeviceRouterGroup group) {
         ObjectNode      root = null;
 
@@ -234,6 +312,12 @@ public class NMSJsonBuilder {
                 node = WiFiJsonBuilder(DTOUtil.map(group.getWifi(), DeviceRouterSettingsWiFi.class));
                 root.put("wifi", node.get("wifi"));
             }
+
+            if(contains(scope, "ota") >= 0) {
+                node = OTAJsonBuilder(DTOUtil.map(group.getOta(), DeviceRouterSettingsOTA.class));
+                root.put("ota", node.get("ota"));
+            }
+
             root.put("scope", "all");
         }
         catch (Exception e) {

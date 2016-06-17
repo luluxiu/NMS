@@ -48,10 +48,73 @@
                 </div>
                 <div class="modal-body form-horizontal m-t required-validate">
 
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">模板名</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="templateName" class="form-control" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">模板说明</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="templateDescription" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">模式</label>
+                    <div class="col-sm-7">
+                      <select name="mode" class="form-control">
+                        <option value="0" selected>从不检查更新</option>
+                        <option value="1">始终检查更新</option>
+                        <option value="2">在时间窗口内检查更新</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">OTA 服务器地址</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="server" class="form-control" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">升级检测间隔</label>
+                    <div class="col-sm-7">
+                      <input type="text" name="pridDelay" class="form-control" /> 分钟
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-3 control-label">&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <div class="col-sm-7">
+                      <div class="ckbox ckbox-success ">
+                        <input type="checkbox" id="restoreFlag" name="restoreFlag" checked="checked" value="1" />
+                        <label for="restoreFlag">升级后复位</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-group2">
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">时间窗口起始时间 </label>
+                      <div class="col-sm-7">
+                        <input type="text" name="windowStart" class="form-control" /> (0~23)
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-sm-3 control-label">时间窗口大小 </label>
+                      <div class="col-sm-7">
+                        <input type="text" name="windowSize" class="form-control" /> (1~23) 小时
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-primary submit">提交</button>
+                  <button type="button" class="btn btn-success submit">提交</button>
                 </div>
               </form>
             </div><!-- /.modal-content -->
@@ -62,6 +125,204 @@
   </div>
 </div><!-- main content -->
 
+  <script type="text/javascript">
+    var TEMPLATE_BASE = "${viewHelper.getPath()}/device/ap/template/ota";
+    var TEMPLATE_SHOW = TEMPLATE_BASE + "/show";
+    var TEMPLATE_EDIT = TEMPLATE_BASE + "/edit";
+    var TEMPLATE_DEL = TEMPLATE_BASE + "/delete";
 
+    var _csrf = "${_csrf.token ?if_exists}";
+    var $alert = $('.alert').hide();
+    var $modal = $('#modal').modal({show: false});
+    var $table = $('#table').bootstrapTable({
+      sortOrder: "desc",
+      url: TEMPLATE_SHOW,
+      formatShowingRows : formatShowingRows,
+      formatRecordsPerPage : formatRecordsPerPage
+    })
+
+
+    $(function() {
+
+      $table.on('post-body.bs.table', function () {
+        var $search = $table.data('bootstrap.table')
+                .$toolbar.find('.search input');
+        $search.attr('placeholder', '根据模板名字搜索 ...');
+      });
+
+      $('.create').click(function() {
+        showModal($(this).text());
+      });
+
+
+      $("select[name='mode']").change(function(){
+
+        switch($("select[name='mode']").val()) {
+          case "0":
+            /* pass through */
+
+          case "1":
+            $(".form-group2").hide();
+            break;
+
+          case "2":
+            $(".form-group2").show();
+            break;
+
+          default:
+            break;
+        }
+      })
+
+      $modal.find('.submit').click(function() {
+        var data;
+        var title;
+        var url;
+
+        if($modal.data('id') && $modal.data('id') >=0) {
+          data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
+          url = TEMPLATE_EDIT;
+          title = "修改";
+        }
+        else {
+          data = $("#config").serialize() + '&_csrf=' + _csrf;
+          url = TEMPLATE_BASE;
+          title = "添加";
+        }
+        $.ajax({
+          url: url,
+          type: 'post',
+          data: data,
+          success: function (result) {
+            if(result.result == "success") {
+              $modal.modal('hide');
+              $table.bootstrapTable('refresh');
+              showAlert(title + '成功!', 'success');
+            }
+            else {
+              $modal.modal('hide');
+              showAlert(title + '失败! ' + result.msg, 'danger');
+            }
+          },
+          error: function () {
+            $modal.modal('hide');
+            showAlert(title + '失败!', 'danger');
+          }
+        });
+      });
+
+    });
+
+
+    window.actionEvents = {
+      'click .update': function (e, value, row) {
+        showModal("修改", row);
+      },
+      'click .remove': function (e, value, row) {
+        if (confirm('确定要删除这一项吗?')) {
+          var data = "id=" + row.id + "&_csrf=" + _csrf;
+          $.ajax({
+            url: TEMPLATE_DEL,
+            type: 'post',
+            data: data,
+            success: function (result) {
+              if(result.result == "success") {
+                $table.bootstrapTable('refresh');
+                showAlert('删除成功!', 'success');
+              }
+              else {
+                showAlert('删除错误!' + result.msg, 'danger');
+              }
+            },
+            error: function () {
+              showAlert('删除错误!', 'danger');
+            }
+          })
+        }
+      }
+    };
+
+    function showModal(title, row) {
+      row = row || {
+                mode: 0,
+                server: '',
+                pridDelay: 10,
+                restoreFlag: 0,
+                windowStart: 2,
+                windowSize: 2,
+                templateName: '',
+                templateDescription: ''
+              };
+
+      if(typeof(row.id) == "undefined") {
+        $modal.data('id', -1);
+      }
+      else if(row.id >= 0){
+        $modal.data('id', row.id);
+        $modal.find('input[name][type="text"]').each(function () {
+          $(this).val("");
+        });
+      }
+
+      $modal.find('.modal-title').text(title);
+      for (var name in row) {
+        $modal.find('input[name="' + name + '"][type="text"]').val(row[name]);
+      }
+
+      if(row['restoreFlag'] == 0) {
+        $("#restoreFlag").prop("checked", false);
+      }
+      else {
+        $("#restoreFlag").prop("checked", true);
+      }
+
+      $("select[name='mode']").val(row['mode']).change();
+
+      $modal.modal('show');
+    }
+
+
+    /* static */
+    function actionFormatter(value) {
+      return [
+        '<div class="btn-group" role="group">',
+        '<a class="btn btn-success btn-xs update" href="javascript:"><i class="fa fa-cog">&nbsp;&nbsp;</i>修改</a>',
+        '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
+        '</div>'
+      ].join('');
+    }
+
+    function queryParams(params) {
+      return {
+        page: params.pageNumber,
+        size: params.pageSize,
+        sortName: params.sortName || "updatedAt",
+        sortOrder: params.sortOrder || "desc",
+        search: params.searchText,
+        _r: Math.floor(Math.random()*10000)
+      };
+    }
+
+    /* alert */
+    function showAlert(title, type) {
+      $alert.attr('class', 'alert alert-' + type || 'success').html('<i class="fa fa-check"></i> ' + title).show();
+      setTimeout(function(){$alert.hide();}, 3000);
+    }
+
+    /* page formatter */
+    function formatRecordsPerPage(pageNumber) {
+      return '&nbsp;' + pageNumber + ' 每页';
+    }
+
+    function formatShowingRows(pageFrom, pageTo, totalRows) {
+      return '共 ' + totalRows + ' 项记录';
+    }
+
+    function runningFormatter(value, row, index) {
+      return index + 1;
+    }
+    /* page formatter - end */
+
+  </script>
 
 <#include "../../../layout/footer.html" >

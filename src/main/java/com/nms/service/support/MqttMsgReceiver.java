@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -23,6 +24,7 @@ import java.util.Map;
  * Created by freedom on 2016/5/26.
  */
 @Service
+@Transactional
 public class MqttMsgReceiver {
 
     @Autowired
@@ -43,7 +45,7 @@ public class MqttMsgReceiver {
         DeviceRouter        router;
         DeviceRouterGroup   group;
 
-        logger.debug("====== Body: " + message.getPayload().toString());
+        logger.info("====== Body: " + message.getPayload().toString());
         try {
             mapper = new ObjectMapper();
             root = mapper.readTree(message.getPayload().toString());
@@ -51,19 +53,24 @@ public class MqttMsgReceiver {
             id = root.path("id").asText();
             scope = root.path("scope").asText();
 
+            if(id.length() < 17) {
+                logger.info("====== invalid id: " + id);
+                return;
+            }
+
             group = deviceRouterGroupNodeService.findGroupByMAC(id);
             if(group == null) {
-                logger.debug("====== id: " + id + " does not belong to any group");
+                logger.info("====== id: " + id + " does not belong to any group");
                 return;
             }
 
             router = deviceRouterService.findOneByMac(id);
             if(router == null) {
-                logger.debug("====== id: " + id + " not exist yet");
+                logger.info("====== id: " + id + " not exist yet");
                 router = new DeviceRouter();
                 DeviceRouterStatus status = new DeviceRouterStatus();
                 router.setMac(id);
-                router.setOnline(true);
+                //router.setOnline(true);
                 router.setGroup(group);
                 router.setStatus(status);
 
@@ -77,8 +84,8 @@ public class MqttMsgReceiver {
                 deviceRouterService.save(router);
             }
             else {
-                logger.debug("====== id: " + id + " found");
-                router.setOnline(true);
+                logger.info("====== id: " + id + " found");
+                //router.setOnline(true);
                 DeviceRouterStatus status = router.getStatus();
 
                 if(scope.equals("all")) {
@@ -117,6 +124,7 @@ public class MqttMsgReceiver {
         String              id;
         DeviceRouter        router;
         DeviceRouterGroup   group;
+        String[]            clientId;
 
         try {
             mapper = new ObjectMapper();
@@ -125,11 +133,20 @@ public class MqttMsgReceiver {
             if(client == null || client.length() < 17) {
                 return;
             }
-            id = client.split("-")[0];
+
+            clientId = client.split("_");
+            // $mac_single
+            if(clientId.length < 2 ||
+                    clientId[0].length() < 17 ||
+                    clientId[1].equals("single") == false) {
+                logger.info("====== invalid client: " + client);
+                return;
+            }
+            id = clientId[0];
 
             group = deviceRouterGroupNodeService.findGroupByMAC(id);
             if(group == null) {
-                System.out.println("id: " + id + "does not belong to any group");
+                logger.info("====== id: " + id + " does not belong to any group");
                 return;
             }
 
@@ -168,6 +185,7 @@ public class MqttMsgReceiver {
         String              id;
         DeviceRouter        router;
         DeviceRouterGroup   group;
+        String[]            clientId;
 
         try {
             mapper = new ObjectMapper();
@@ -176,11 +194,20 @@ public class MqttMsgReceiver {
             if(client == null || client.length() < 17) {
                 return;
             }
-            id = client.split("-")[0];
+
+            clientId = client.split("_");
+            // $mac_single
+            if(clientId.length < 2 ||
+                    clientId[0].length() < 17 ||
+                    clientId[1].equals("single") == false) {
+                logger.info("====== invalid client: " + client);
+                return;
+            }
+            id = clientId[0];
 
             group = deviceRouterGroupNodeService.findGroupByMAC(id);
             if(group == null) {
-                System.out.println("id: " + id + "does not belong to any group");
+                logger.info("====== id: " + id + " does not belong to any group");
                 return;
             }
 
@@ -238,6 +265,9 @@ public class MqttMsgReceiver {
         else if(scope.equals("system")) {
             status.setSystem(node.toString());
         }
+        else if(scope.equals("ota")) {
+            status.setOta(node.toString());
+        }
         else if(scope.equals("client")) {
             status.setClient(node.toString());
         }
@@ -277,6 +307,11 @@ public class MqttMsgReceiver {
             status.setSystem(node.toString());
         }
 
+        node = root.path("ota");
+        if(node != null) {
+            status.setOta(node.toString());
+        }
+
         node = root.path("client");
         if(node != null) {
             status.setClient(node.toString());
@@ -312,6 +347,12 @@ public class MqttMsgReceiver {
             if(node != null) {
                 router.setWifi(mapper.readValue(node.toString(), DeviceRouterSettingsWiFi.class));
                 status.setWifi(node.toString());
+            }
+
+            node = root.path("ota");
+            if(node != null) {
+                router.setOta(mapper.readValue(node.toString(), DeviceRouterSettingsOTA.class));
+                status.setOta(node.toString());
             }
 
             node = root.path("version");

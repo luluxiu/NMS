@@ -28,6 +28,9 @@
                 <#if group.getWifi() ??>
                 <option value="wifi">WiFi</option>
                 </#if>
+                <#if group.getOta() ??>
+                  <option value="ota">WiFi</option>
+                </#if>
               </select>
             </div>
             <div class="col-sm-5 col-sm-offset-1">
