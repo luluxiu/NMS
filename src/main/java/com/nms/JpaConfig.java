@@ -45,7 +45,7 @@ class JpaConfig implements TransactionManagementConfigurer {
 
 
     @Bean
-    public DataSource configureDataSource() {
+    public DataSource configureNMSDataSource() {
 
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(driver);
@@ -66,7 +66,7 @@ class JpaConfig implements TransactionManagementConfigurer {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactoryBean.setDataSource(configureDataSource());
+        entityManagerFactoryBean.setDataSource(configureNMSDataSource());
         entityManagerFactoryBean.setPackagesToScan("com.nms");
         entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
