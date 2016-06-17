@@ -8,10 +8,14 @@ import com.nms.service.support.MqttMsgSender;
 import com.nms.service.support.NMSJsonBuilder;
 import com.nms.utils.DTOUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import static com.nms.service.support.CacheNameSettings.CACHE_NAME_AP;
 
 /**
  * Created by freedom on 2016/5/23.
@@ -33,8 +37,6 @@ public class DeviceRouterService {
 */
     @Autowired
     private MqttMsgSender mqttMsgSender;
-
-    public static final String CACHE_NAME = "cache.device.router";
 
     //@Cacheable(value = CACHE_NAME)
     public Page<DeviceRouter> findAll(PageBean pb) {
@@ -60,20 +62,22 @@ public class DeviceRouterService {
     }
 
 
-    //@CacheEvict(value = CACHE_NAME, allEntries = true)
+    @CacheEvict(value = CACHE_NAME_AP, allEntries = true)
     public void delete(Long id) {
         routerRepository.delete(id);
     }
 
-    //@Cacheable(value = CACHE_NAME, key = "#id.toString().concat('-router')")
+    //@Cacheable(value = CACHE_NAME_AP, key = "#id.toString().concat('-router')")
     public DeviceRouter findOne(Long id) {
         return routerRepository.findOne(id);
     }
 
+    @Cacheable(value = CACHE_NAME_AP, key = "#mac")
     public DeviceRouter findOneByMac(String mac) {
         return routerRepository.findOneByMac(mac);
     }
 
+    @CacheEvict(value = CACHE_NAME_AP, allEntries = true)
     public void save(DeviceRouter router,
                      TemplateWanBean wan, TemplateLanBean lan,
                      TemplateWifiBean wifi, TemplateOTABean ota) {
@@ -110,9 +114,8 @@ public class DeviceRouterService {
         routerRepository.save(router);
     }
 
+    @CacheEvict(value = CACHE_NAME_AP, allEntries = true)
     public void save(DeviceRouter router) {
-
-
         routerRepository.save(router);
     }
 
