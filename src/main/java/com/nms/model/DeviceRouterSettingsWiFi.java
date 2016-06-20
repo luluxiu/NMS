@@ -16,16 +16,16 @@ public class DeviceRouterSettingsWiFi extends BaseModel {
 
     /* basic */
     @Column(name = "wifiEnable")
-    private Integer wifi;
+    private int wifi;
 
     @Column(name = "wifiSSID", length = 64)
     private String ssid;
 
     @Column(name = "wifiChannel")
-    private Integer channel;
+    private int channel;
 
     @Column(name = "wifiMaxStation")
-    private Integer maxStation;
+    private int maxStation;
 
     /* security */
     @Column(name = "wifiEncryption", length = 16)

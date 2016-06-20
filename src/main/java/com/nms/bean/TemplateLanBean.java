@@ -29,11 +29,11 @@ public class TemplateLanBean {
     @Length(min = 7, max = 16)
     private String lanNetmask;
 
-    private Integer dhcp;
+    private int dhcp;
 
-    private Integer start;
+    private int start;
 
-    private Integer limit;
+    private int limit;
 
     private String leaseTime;
 }

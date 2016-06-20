@@ -20,7 +20,7 @@
         data-show-columns="true" data-striped="true" data-show-toggle="true"
         data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
         data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
-        data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+        data-search='true' data-search-time-out='500' data-trim-on-search='true'
         data-search-on-enter-key='true'>
         <thead>
           <th data-formatter="runningFormatter">No.</th>
@@ -177,6 +177,28 @@
 
   $(function() {
 
+
+    var validator = $("#config").validate({
+      rules: {
+        name: {
+          maxlength: 32,
+          required: true
+        },
+        description: {
+          maxlength: 256
+        }
+      },
+      messages: {
+        name: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        description: {
+          maxlength: $.validator.format("最大长度{0}字节")
+        }
+      }
+    });
+
     $table.on('post-body.bs.table', function () {
       var $search = $table.data('bootstrap.table')
         .$toolbar.find('.search input');
@@ -191,6 +213,10 @@
       var data;
       var title;
       var url;
+
+      if(validator.form() == false) {
+        return false;
+      }
 
       if($modal.data('id') && $modal.data('id') >=0) {
         data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>NMS</title>
+  <title>${viewHelper.getAppName()?if_exists}</title>
   <link rel="stylesheet" type="text/css" id="theme" href="${viewHelper.getPath()}/css/bootstrap-table.css"/>
   <link href="${viewHelper.getPath()}/css/style.default.css" rel="stylesheet">
   <link href="${viewHelper.getPath()}/css/style.custom.css" rel="stylesheet">
@@ -45,8 +45,10 @@
 <section>
   <div class="leftpanel">
     <!-- logopanel -->
-    <div class="logopanel">
-      <h1>NMS</h1>
+    <div class="logopanel" style="padding: 10px 20px 10px 40px;">
+      <h1 style="display:inline;vertical-align:sub; ">${viewHelper.getAppName()?if_exists}</h1>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <span style="vertical-align:sub;color:white; ">${viewHelper.getAppVersion()?if_exists}</span>
     </div>
 
     <div class="leftpanelinner">

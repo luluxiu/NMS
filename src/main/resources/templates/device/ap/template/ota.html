@@ -20,7 +20,7 @@
         data-show-columns="true" data-striped="true" data-show-toggle="true"
         data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
         data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
-        data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+        data-search='true' data-search-time-out='500' data-trim-on-search='true'
         data-search-on-enter-key='true'>
         <thead>
           <th data-formatter="runningFormatter">No.</th>
@@ -125,6 +125,8 @@
   </div>
 </div><!-- main content -->
 
+  <script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/additional/ipv4.js'></script>
+
   <script type="text/javascript">
     var TEMPLATE_BASE = "${viewHelper.getPath()}/device/ap/template/ota";
     var TEMPLATE_SHOW = TEMPLATE_BASE + "/show";
@@ -143,6 +145,83 @@
 
 
     $(function() {
+
+      var validator = $("#config").validate({
+        rules: {
+          templateName: {
+            maxlength: 32,
+            required: true
+          },
+          templateDescription: {
+            maxlength: 256
+          },
+          /* ota */
+          mode: {
+            digits: true,
+            range: [0, 2],
+            required: true
+          },
+          server: {
+            url: true,
+            maxlength: 128,
+            required: true
+          },
+          pridDelay: {
+            digits: true,
+            min: 5,
+            required: true
+          },
+          windowStart: {
+            digits: true,
+            range: [0, 23],
+            required: function() {
+              return $("select[name='mode']").val() == "2";
+            }
+          },
+          windowSize: {
+            digits: true,
+            range: [1, 23],
+            required: function() {
+              return $("select[name='mode']").val() == "2";
+            }
+          }
+        },
+        messages: {
+          templateName: {
+            maxlength: $.validator.format("最大长度{0}字节"),
+            required: "此项必填"
+          },
+          templateDescription: {
+            maxlength: $.validator.format("最大长度{0}字节")
+          },
+          /* ota */
+          mode: {
+            digits: "请选择 OTA 模式",
+            range: $.validator.format("请输入 {0} - {1} 整数"),
+            required: "此项必填"
+          },
+          server: {
+            url: "请输入有效的URL地址",
+            maxlength: $.validator.format("最大长度{0}字节"),
+            required: "此项必填"
+          },
+          pridDelay: {
+            digits: "请输入正整数",
+            min: $.validator.format("最小{0}分钟"),
+            required: "此项必填"
+          },
+          windowStart: {
+            digits: "请输入正整数",
+            range: $.validator.format("请输入 {0} - {1} 整数"),
+            required: "此项必填"
+          },
+          windowSize: {
+            digits: "请输入正整数",
+            range: $.validator.format("请输入 {0} - {1} 整数"),
+            required: "此项必填"
+          }
+        }
+      });
 
       $table.on('post-body.bs.table', function () {
         var $search = $table.data('bootstrap.table')
@@ -178,6 +257,10 @@
         var data;
         var title;
         var url;
+
+        if(validator.form() == false) {
+          return false;
+        }
 
         if($modal.data('id') && $modal.data('id') >=0) {
           data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;

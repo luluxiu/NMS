@@ -1,5 +1,6 @@
 package com.nms.service.support;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -13,6 +14,11 @@ public class SViewHelper {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MMMM dd, yyyy");
     private static final SimpleDateFormat DATE_FORMAT_MONTH_DAY = new SimpleDateFormat("MMM dd");
 
+    @Value("${tigercel.app.name}")
+    private String appName;
+
+    @Value("${tigercel.app.version}")
+    private String appVersion;
 
     private String path;
     private String username;
@@ -52,6 +58,14 @@ public class SViewHelper {
 
     public void setUsername(String name) {
         username = name;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public String getAppVersion() {
+        return appVersion;
     }
 }
 

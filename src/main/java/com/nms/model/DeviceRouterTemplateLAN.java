@@ -23,13 +23,13 @@ public class DeviceRouterTemplateLAN extends BaseModel {
     private String lanNetmask;
 
     @Column(name = "lanDhcp")
-    private Integer dhcp;
+    private int dhcp;
 
     @Column(name = "lanStart")
-    private Integer start;
+    private int start;
 
     @Column(name = "lanLimit")
-    private Integer limit;
+    private int limit;
 
     @Column(length = 16)
     private String leaseTime;

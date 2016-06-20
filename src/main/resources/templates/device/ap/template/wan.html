@@ -159,6 +159,8 @@
   </div>
 </div><!-- main content -->
 
+<script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/additional/ipv4.js'></script>
+
 <script type="text/javascript">
   var TEMPLATE_WAN_BASE = "${viewHelper.getPath()}/device/ap/template/wan";
   var TEMPLATE_WAN_SHOW = TEMPLATE_WAN_BASE + "/show";
@@ -177,6 +179,124 @@
 
 
   $(function() {
+
+
+    var validator = $("#config").validate({
+      rules: {
+        templateName: {
+          maxlength: 32,
+          required: true
+        },
+        templateDescription: {
+          maxlength: 256
+        },
+        /* wan */
+        protocol: {
+          required: true
+        },
+        address: {
+          ipv4: true,
+          required: function() {
+            return $("select[name='protocol']").val() == "static";
+          }
+        },
+        netmask: {
+          ipv4: true,
+          required: function() {
+            return $("select[name='protocol']").val() == "static";
+          }
+        },
+        gateway: {
+          ipv4: true,
+          required: function() {
+            return $("select[name='protocol']").val() == "static";
+          }
+        },
+        username: {
+          maxlength: 64,
+          required: function() {
+            return $("select[name='protocol']").val() == "pppoe";
+          }
+        },
+        password: {
+          maxlength: 64,
+          required: function() {
+            return $("select[name='protocol']").val() == "pppoe";
+          }
+        },
+        modemDevice: {
+          maxlength: 32,
+          required: function() {
+            return $("select[name='protocol']").val() == "3g";
+          }
+        },
+        serviceType: {
+          required: function() {
+            return $("select[name='protocol']").val() == "3g";
+          }
+        },
+        APN: {
+          maxlength: 32,
+          required: function() {
+            return $("select[name='protocol']").val() == "3g";
+          }
+        },
+        dialNumber: {
+          maxlength: 32,
+          required: function() {
+            return $("select[name='protocol']").val() == "3g";
+          }
+        }
+      },
+      messages: {
+        templateName: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        templateDescription: {
+          maxlength: $.validator.format("最大长度{0}字节")
+        },
+        /* wan */
+        protocol: {
+          required: "请选择 WAN 连接模式"
+        },
+        address: {
+          ipv4: "请输入有效的 IP",
+          required: "此项必填"
+        },
+        netmask: {
+          ipv4: "请输入有效的子网掩码",
+          required: "此项必填"
+        },
+        gateway: {
+          ipv4: "请输入有效的网关",
+          required: "此项必填"
+        },
+        username: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        password: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        modemDevice: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        serviceType: {
+          required: "此项必填"
+        },
+        APN: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        dialNumber: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        }
+      }
+    });
 
     $table.on('post-body.bs.table', function () {
       var $search = $table.data('bootstrap.table')
@@ -225,6 +345,10 @@
       var data;
       var title;
       var url;
+
+      if(validator.form() == false) {
+        return false;
+      }
 
       if($modal.data('id') && $modal.data('id') >=0) {
         data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;

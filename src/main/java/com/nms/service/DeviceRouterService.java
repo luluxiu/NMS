@@ -86,6 +86,7 @@ public class DeviceRouterService {
             router.setWan(DTOUtil.map(wan, DeviceRouterSettingsWAN.class));
         }
         else {
+            wan.setId(router.getWan().getId());
             DTOUtil.mapTo(wan, router.getWan());
         }
 
@@ -93,6 +94,7 @@ public class DeviceRouterService {
             router.setLan(DTOUtil.map(lan, DeviceRouterSettingsLAN.class));
         }
         else {
+            lan.setId(router.getLan().getId());
             DTOUtil.mapTo(lan, router.getLan());
         }
 
@@ -100,6 +102,7 @@ public class DeviceRouterService {
             router.setWifi(DTOUtil.map(wifi, DeviceRouterSettingsWiFi.class));
         }
         else {
+            wifi.setId(router.getWifi().getId());
             DTOUtil.mapTo(wifi, router.getWifi());
         }
 
@@ -107,6 +110,7 @@ public class DeviceRouterService {
             router.setOta(DTOUtil.map(ota, DeviceRouterSettingsOTA.class));
         }
         else {
+            ota.setId(router.getOta().getId());
             DTOUtil.mapTo(ota, router.getOta());
         }
 

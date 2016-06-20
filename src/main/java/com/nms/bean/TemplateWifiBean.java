@@ -23,16 +23,16 @@ public class TemplateWifiBean {
 
     /* basic */
     @NotNull
-    private Integer wifi;
+    private int wifi = 0;
 
     @NotBlank
     @Length(min = 1, max = 64)
     private String ssid;
 
     @NotNull
-    private Integer channel;
+    private int channel;
 
-    private Integer maxStation;
+    private int maxStation;
 
     /* security */
     @NotBlank

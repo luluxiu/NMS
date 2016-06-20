@@ -20,7 +20,7 @@
         data-show-columns="true" data-striped="true" data-show-toggle="true"
         data-query-params-type="" data-query-params="queryParams" data-toolbar=".toolbar"
         data-page-list="[10, 20, 50]" data-pagination="true" data-side-pagination="server"
-        data-search='true' data-search-time-out='3000' data-trim-on-search='true'
+        data-search='true' data-search-time-out='500' data-trim-on-search='true'
         data-search-on-enter-key='true'>
         <thead>
           <th data-formatter="runningFormatter">No.</th>
@@ -116,6 +116,9 @@
   </div>
 </div><!-- main content -->
 
+<script type='text/javascript' src='${viewHelper.getPath()}/js/jquery-validation/additional/ipv4.js'></script>
+
+
 <script type="text/javascript">
   var TEMPLATE_BASE = "${viewHelper.getPath()}/device/ap/template/lan";
   var TEMPLATE_SHOW = TEMPLATE_BASE + "/show";
@@ -135,6 +138,74 @@
 
   $(function() {
 
+    var validator = $("#config").validate({
+      rules: {
+        templateName: {
+          maxlength: 32,
+          required: true
+        },
+        templateDescription: {
+          maxlength: 256
+        },
+        /* lan */
+        lanAddress: {
+          ipv4: true,
+          required: true
+        },
+        lanNetmask: {
+          ipv4: true,
+          required: true
+        },
+        start: {
+          digits: true,
+          range: [1, 254],
+          required: "#dhcp:checked"
+        },
+        limit: {
+          digits: true,
+          range: function () {
+            return [1, 254 - $("input[name='start']").val()];
+          },
+          required: "#dhcp:checked"
+        },
+        leaseTime: {
+          required: "#dhcp:checked"
+        }
+      },
+      messages: {
+        templateName: {
+          maxlength: $.validator.format("最大长度{0}字节"),
+          required: "此项必填"
+        },
+        templateDescription: {
+          maxlength: $.validator.format("最大长度{0}字节")
+        },
+        /* lan */
+        lanAddress: {
+          ipv4: "请输入有效的 IP",
+          required: "此项必填"
+        },
+        lanNetmask: {
+          ipv4: "请输入有效的子网掩码",
+          required: "此项必填"
+        },
+        start: {
+          digits: "请输入正整数",
+          range: $.validator.format("请输入 {0} - {1} 整数"),
+          required: "此项必填"
+        },
+        limit: {
+          digits: "请输入正整数",
+          range: $.validator.format("请输入 {0} - {1} 整数"),
+          required: "此项必填"
+        },
+        leaseTime: {
+          required: "此项必填"
+        }
+      }
+    });
+
+
     $table.on('post-body.bs.table', function () {
       var $search = $table.data('bootstrap.table')
         .$toolbar.find('.search input');
@@ -150,6 +221,10 @@
       var data;
       var title;
       var url;
+
+      if(validator.form() == false) {
+        return false;
+      }
 
       if($modal.data('id') && $modal.data('id') >=0) {
         data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
