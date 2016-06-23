@@ -7,6 +7,7 @@ import com.nms.model.*;
 import com.nms.service.DeviceRouterGroupNodeService;
 import com.nms.service.DeviceRouterGroupService;
 import com.nms.service.DeviceRouterService;
+import com.nms.utils.DataValidationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,7 +125,7 @@ public class MqttMsgReceiver {
         String              id;
         DeviceRouter        router;
         DeviceRouterGroup   group;
-        String[]            clientId;
+        //String[]            clientId;
 
         try {
             mapper = new ObjectMapper();
@@ -134,15 +135,10 @@ public class MqttMsgReceiver {
                 return;
             }
 
-            clientId = client.split("_");
-            // $mac_single
-            if(clientId.length < 2 ||
-                    clientId[0].length() < 17 ||
-                    clientId[1].equals("single") == false) {
-                logger.info("====== invalid client: " + client);
+            id = client;
+            if(DataValidationUtil.isMACValid(id) == false) {
                 return;
             }
-            id = clientId[0];
 
             group = deviceRouterGroupNodeService.findGroupByMAC(id);
             if(group == null) {
@@ -185,7 +181,6 @@ public class MqttMsgReceiver {
         String              id;
         DeviceRouter        router;
         DeviceRouterGroup   group;
-        String[]            clientId;
 
         try {
             mapper = new ObjectMapper();
@@ -195,15 +190,10 @@ public class MqttMsgReceiver {
                 return;
             }
 
-            clientId = client.split("_");
-            // $mac_single
-            if(clientId.length < 2 ||
-                    clientId[0].length() < 17 ||
-                    clientId[1].equals("single") == false) {
-                logger.info("====== invalid client: " + client);
+            id = client;
+            if(DataValidationUtil.isMACValid(id) == false) {
                 return;
             }
-            id = clientId[0];
 
             group = deviceRouterGroupNodeService.findGroupByMAC(id);
             if(group == null) {

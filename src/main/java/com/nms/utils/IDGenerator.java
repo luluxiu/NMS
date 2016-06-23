@@ -1,5 +1,8 @@
 package com.nms.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -8,6 +11,9 @@ import java.security.SecureRandom;
  * Created by freedom on 2016/5/26.
  */
 public class IDGenerator {
+
+    private static Logger logger = LoggerFactory.getLogger(IDGenerator.class);
+
     public static String getID() {
         String id = null;
 
@@ -30,7 +36,7 @@ public class IDGenerator {
             id = hexEncode(result);
         }
         catch (NoSuchAlgorithmException ex) {
-            System.err.println(ex);
+            logger.error(ex.getMessage());
         }
         return id;
     }
