@@ -6,15 +6,18 @@
 <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
   <div class="mb-container">
     <div class="mb-middle">
-      <div class="mb-title"><span class="fa fa-sign-out"></span><strong>退出登录</strong> ?</div>
+      <div class="mb-title">
+        <span class="fa fa-sign-out"></span>
+        <strong><@spring.message "logout.confirm" /></strong>
+      </div>
       <div class="mb-content">
       </div>
       <div class="mb-footer">
         <div class="pull-right">
           <form name="logout" action="${viewHelper.getPath()}/logout" method="post" >
             <input type="hidden" name="_csrf" value="${_csrf.token ?if_exists}" />
-            <button type="submit" class="btn btn-success btn-lg">确定</button>
-            <button class="btn btn-default btn-lg mb-control-close">取消</button>
+            <button type="submit" class="btn btn-success btn-lg"><@spring.message "form.confirm" /></button>
+            <button class="btn btn-default btn-lg mb-control-close"><@spring.message "form.cancel" /></button>
           </form>
         </div>
       </div>
@@ -81,6 +84,25 @@
   <#else>
     $("#menuDevice").addClass("active");
   </#if>
+
+
+  var curLang = "${viewHelper.getLanguage() ?if_exists}";
+  $("#changeLanguage").val(curLang);
+  $('#changeLanguage').selectpicker('render');
+  $("#changeLanguage").change(function() {
+    $.ajax({
+      cache: false,
+      url: "${viewHelper.getPath()}/language?lang=" +
+              ($("#changeLanguage").val() == "auto" ? "" : $("#changeLanguage").val()),
+      type: "get",
+      success: function (result) {
+        top.location.reload();
+      },
+      error: function() {
+        top.location.reload();
+      }
+    })
+  });
 </script>
 </body>
 </html>

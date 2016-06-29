@@ -1,7 +1,7 @@
 <#include "../../../layout/header.html" >
 
 <div class="pageheader">
-  <h2><i class="fa fa-tasks"></i>分组配置</h2>
+  <h2><i class="fa fa-tasks"></i><@spring.message "device.group.configuration" /></h2>
 </div>
 
 <!-- main content -->
@@ -10,7 +10,7 @@
     <div class="col-md-12">
       <div class="panel">
         <div class="panel-heading">
-          <h4 class="panel-title">分组 : <span class="groupName">N/A</span>
+          <h4 class="panel-title"><@spring.message "device.group.text" /> - <span class="groupName">N/A</span>
             <div class="pull-right">
               <button class="btn btn-default" type="button" name="refresh" title="Refresh">
                 <i class="fa fa-refresh icon-refresh"></i>
@@ -21,10 +21,10 @@
         <div class="panel-body">
           <!-- Nav tabs -->
           <ul class="nav nav-tabs nav-line">
-            <li class="active"><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
-            <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
-            <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
-            <li><a href="#ota" data-toggle="tab"><strong>OTA</strong></a></li>
+            <li class="active"><a href="#wan" data-toggle="tab"><strong><@spring.message "ap.wan.text" /></strong></a></li>
+            <li><a href="#lan" data-toggle="tab"><strong><@spring.message "ap.lan.text" /></strong></a></li>
+            <li><a href="#wifi" data-toggle="tab"><strong><@spring.message "ap.wifi.text" /></strong></a></li>
+            <li><a href="#ota" data-toggle="tab"><strong><@spring.message "ap.ota.text" /></strong></a></li>
           </ul>
 
           <div class="tab-content">
@@ -99,7 +99,7 @@
         processConfigInfo(result);
       },
       error: function() {
-        alert("获取信息失败");
+        alert("<@spring.message "ap.info.error" />");
       }
     });
   }
@@ -124,40 +124,40 @@
       return;
     }
 
-    switch(ota.mode) {
+    switch(parseInt(ota.mode)) {
       case 0:
-        appendDom(dom, "模式", "从不检查更新");
+        appendDom(dom, "<@spring.message "ap.ota.mode.text" />", "<@spring.message "ap.ota.mode.m0" />");
         break;
 
       case 1:
-        appendDom(dom, "模式", "始终检查更新");
+        appendDom(dom, "<@spring.message "ap.ota.mode.text" />", "<@spring.message "ap.ota.mode.m1" />");
         break;
 
       case 2:
-        appendDom(dom, "模式", "在时间窗口内检查更新");
+        appendDom(dom, "<@spring.message "ap.ota.mode.text" />", "<@spring.message "ap.ota.mode.m2" />");
         break;
 
       default:
-        appendDom(dom, "模式", ota.mode);
+        appendDom(dom, "<@spring.message "ap.ota.mode.text" />", ota.mode);
         break;
     }
 
-    appendDom(dom, "OTA 服务器地址", ota.server);
-    appendDom(dom, "升级检测间隔", ota.pridDelay + " 分钟");
+    appendDom(dom, "<@spring.message "ap.ota.url" />", ota.server);
+    appendDom(dom, "<@spring.message "ap.ota.delay" />", ota.pridDelay + " <@spring.message "ap.ota.min" />");
 
     if(ota.restoreFlag == 1) {
-      appendDom(dom, "升级后是否还原出厂配置", "是");
+      appendDom(dom, "<@spring.message "ap.ota.reset.text" />", "<@spring.message "ap.ota.reset.on" />");
     }
     else if(ota.restoreFlag == 0) {
-      appendDom(dom, "升级后是否还原出厂配置", "否");
+      appendDom(dom, "<@spring.message "ap.ota.reset.text" />", "<@spring.message "ap.ota.reset.off" />");
     }
     else {
-      appendDom(dom, "升级后是否还原出厂配置", ota.restoreFlag);
+      appendDom(dom, "<@spring.message "ap.ota.reset.text" />", ota.restoreFlag);
     }
 
     if(ota.mode == 2) {
-      appendDom(dom, "时间窗口起始时间", ota.windowStart);
-      appendDom(dom, "时间窗口大小", ota.windowSize + " 小时");
+      appendDom(dom, "<@spring.message "ap.ota.window.start" />", ota.windowStart);
+      appendDom(dom, "<@spring.message "ap.ota.window.size" />", ota.windowSize + " <@spring.message "ap.ota.hour" />");
     }
   }
 
@@ -169,23 +169,23 @@
     }
 
     if(wifi.wifi == 1) {
-      appendDom(dom, "WiFi", "开启");
+      appendDom(dom, "WiFi", "<@spring.message "ap.wifi.on" />");
     }
     else {
-      appendDom(dom, "WiFi", "关闭");
+      appendDom(dom, "WiFi", "<@spring.message "ap.wifi.off" />");
     }
 
     appendDom(dom, "SSID", wifi.ssid);
-    appendDom(dom, "信道", wifi.channel);
-    appendDom(dom, "最大连接数", wifi.maxStation);
-    appendDom(dom, "加密方式", wifi.encryption);
+    appendDom(dom, "<@spring.message "ap.wifi.channel" />", wifi.channel);
+    appendDom(dom, "<@spring.message "ap.wifi.maxconnection" />", wifi.maxStation);
+    appendDom(dom, "<@spring.message "ap.wifi.encryption" />", wifiEnc(wifi.encryption));
 
     switch(wifi.encryption) {
       case "none":
         break;
 
       case "open":
-        appendDom(dom, "密码", wifi.key);
+        appendDom(dom, "<@spring.message "ap.wifi.key" />", wifi.key);
         break;
 
       case "psk":
@@ -195,10 +195,32 @@
         /* pass through */
 
       case "psk-mixed":
-        appendDom(dom, "算法", wifi.cipher);
-        appendDom(dom, "密码", wifi.key);
+        appendDom(dom, "<@spring.message "ap.wifi.cipher" />", wifi.cipher);
+        appendDom(dom, "<@spring.message "ap.wifi.key" />", wifi.key);
         break;
     }
+  }
+
+  function wifiEnc(enc) {
+    var ret = "";
+
+    if(enc == "none") {
+      ret = "<@spring.message "ap.wifi.enc.none" />";
+    }
+    else if(enc == "open") {
+      ret = "WEP";
+    }
+    else if(enc == "psk-mixed") {
+      ret = "<@spring.message "ap.wifi.enc.wpamixed" />";
+    }
+    else if(enc == "psk") {
+      ret = "WPA-PSK";
+    }
+    else if(enc == "psk2") {
+      ret = "WPA2-PSK";
+    }
+
+    return ret;
   }
 
 
@@ -210,18 +232,18 @@
     }
 
     appendDom(dom, "IP", lan.lanAddress);
-    appendDom(dom, "子网掩码", lan.lanNetmask);
+    appendDom(dom, "<@spring.message "ap.lan.netmask" />", lan.lanNetmask);
 
     if(lan.dhcp == 0) {
-      appendDom(dom, "DHCP", "关闭");
+      appendDom(dom, "DHCP", "<@spring.message "ap.lan.dhcp.off" />");
       return;
     }
 
-    appendDom(dom, "DHCP", "开启");
+    appendDom(dom, "DHCP", "<@spring.message "ap.lan.dhcp.on" />");
 
-    appendDom(dom, "开始", lan.start);
-    appendDom(dom, "客户数", lan.limit);
-    appendDom(dom, "租用时间", lan.leaseTime);
+    appendDom(dom, "<@spring.message "ap.lan.dhcp.start" />", lan.start);
+    appendDom(dom, "<@spring.message "ap.lan.dhcp.limit" />", lan.limit);
+    appendDom(dom, "<@spring.message "ap.lan.dhcp.leasetime" />", lan.leaseTime);
   }
 
   function processConfigWanInfo(wan) {
@@ -231,25 +253,25 @@
       return;
     }
 
-    appendDom(dom, "模式", wan.protocol);
+    appendDom(dom, "<@spring.message "ap.wan.protocol" />", wan.protocol);
     switch(wan.protocol) {
       case "dhcp":
         break;
 
       case "static":
         appendDom(dom, "IP", wan.address);
-        appendDom(dom, "子网掩码", wan.netmask);
-        appendDom(dom, "网关", wan.gateway);
+        appendDom(dom, "<@spring.message "ap.wan.static.netmask" />", wan.netmask);
+        appendDom(dom, "<@spring.message "ap.wan.static.gateway" />", wan.gateway);
         break;
 
       case "pppoe":
-        appendDom(dom, "用户名", wan.username);
-        appendDom(dom, "密码", wan.password);
+        appendDom(dom, "<@spring.message "ap.wan.pppoe.username" />", wan.username);
+        appendDom(dom, "<@spring.message "ap.wan.pppoe.password" />", wan.password);
         break;
 
       case "3g":
-        appendDom(dom, "调制解调器节点", wan.modemDevice);
-        appendDom(dom, "服务类型", wan.serviceType);
+        appendDom(dom, "<@spring.message "ap.wan.g3.modem" />", wan.modemDevice);
+        appendDom(dom, "<@spring.message "ap.wan.g3.service" />", wanServiceType(wan.serviceType));
         appendDom(dom, "APN", wan.APN);
         appendDom(dom, "Dial Number", wan.dialNumber);
         break;
@@ -257,6 +279,28 @@
       default:
         break;
     }
+  }
+
+  function wanServiceType(type) {
+    var ret = "";
+
+    if(type == "auto") {
+      ret = "<@spring.message "ap.wan.g3.sv.auto" />";
+    }
+    else if(type == "lte_only") {
+      ret = "<@spring.message "ap.wan.g3.sv.lte" />";
+    }
+    else if(type == "umts_only") {
+      ret = "<@spring.message "ap.wan.g3.sv.umts" />";
+    }
+    else if(type == "gprs_only") {
+      ret = "<@spring.message "ap.wan.g3.sv.gprs" />";
+    }
+    else if(type == "evdo") {
+      ret = "<@spring.message "ap.wan.g3.sv.evdo" />";
+    }
+
+    return ret;
   }
 
   function appendDom(selector, key, value) {

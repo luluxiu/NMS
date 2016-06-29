@@ -505,7 +505,6 @@ body.notfound, body.signin {
 
 .nav-bracket > li {
     border-top: 1px solid #eaecf0;
-    text-transform: uppercase;
 }
 
 .nav-bracket > li:last-child {

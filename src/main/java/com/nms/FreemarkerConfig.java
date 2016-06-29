@@ -8,6 +8,7 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by freedom on 2016/4/13.
@@ -20,13 +21,15 @@ public class FreemarkerConfig extends FreeMarkerWebConfiguration {
 
     @Override
     public FreeMarkerConfigurer freeMarkerConfigurer() {
-        FreeMarkerConfigurer    cfg             = super.freeMarkerConfigurer();
-        Map<String, Object>     sharedVariables = new HashMap<>();
+        FreeMarkerConfigurer cfg = super.freeMarkerConfigurer();
+        Map<String, Object> sharedVariables = new HashMap<>();
+        Properties properties = new Properties();
+
+        properties.setProperty("auto_import", "include/spring.ftl as spring");
 
         sharedVariables.put("viewHelper", svh);
-
+        cfg.setFreemarkerSettings(properties);
         cfg.setFreemarkerVariables(sharedVariables);
-        //super.applyProperties(cfg);
 
         return cfg;
     }

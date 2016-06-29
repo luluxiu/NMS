@@ -10,12 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
 
 /**
  * Created by freedom on 2016/4/13.
@@ -26,9 +31,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private SViewHelper svh;
 
+    @Autowired
+    private I18NConfiguration i18NConfiguration;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+
         registry.addInterceptor(viewObjectAddingInterceptor());
+        registry.addInterceptor(i18NConfiguration.localeChangeInterceptor());
+
         super.addInterceptors(registry);
     }
 
@@ -40,10 +51,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
             public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
                     throws Exception {
 
+                /* response time */
                 svh.setStartTime(System.currentTimeMillis());
+
+                /* server root path */
                 if(svh.getPath() == null) {
                     svh.setPath(request.getContextPath());
                 }
+
+                /* current username */
                 if(svh.getUsername() == null) {
                     SecurityContextImpl securityContextImpl = (SecurityContextImpl) request
                             .getSession().getAttribute("SPRING_SECURITY_CONTEXT");
@@ -54,25 +70,28 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                     }
                 }
 
+                /* locale language */
+
+
                 return true;
             }
+
+            @Override
+            public void postHandle(
+                    HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
+                    throws Exception {
+
+                Cookie[] cookies = request.getCookies();
+
+                svh.setLanguage("auto");
+                if(cookies != null) {
+                    for (Cookie c : cookies) {
+                        if (c.getName().equals("BATMAN")) {
+                            svh.setLanguage(c.getValue());
+                        }
+                    }
+                }
+            }
         };
-    }
-
-    @Bean
-    public EmbeddedServletContainerCustomizer containerCustomizer(){
-        return new MyCustomizer();
-    }
-
-    private static class MyCustomizer implements EmbeddedServletContainerCustomizer {
-
-        @Override
-        public void customize(ConfigurableEmbeddedServletContainer container) {
-            container.addErrorPages(new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400.html"));
-            container.addErrorPages(new ErrorPage(HttpStatus.FORBIDDEN, "/error/403.html"));
-            container.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error/404.html"));
-            container.addErrorPages(new ErrorPage(HttpStatus.SERVICE_UNAVAILABLE, "/error/5xx.html"));
-        }
-
     }
 }

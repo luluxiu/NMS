@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403</title>
-    <link href="../css/style.default.css" rel="stylesheet">
-    <link href="../css/style.custom.css" rel="stylesheet">
+    <title>${status ?if_exists} - Error</title>
+    <link href="${viewHelper.getPath()}/css/style.default.css" rel="stylesheet">
+    <link href="${viewHelper.getPath()}/css/style.custom.css" rel="stylesheet">
 
     <style>
         body {
@@ -46,16 +46,15 @@
 
 <body class="gray-bg">
 <div class="middle-box text-center animated fadeInDown">
-    <h1>403</h1>
-    <h3 class="font-bold">请求被拒绝</h3>
+    <h1>${status ?if_exists}</h1>
+    <h3 class="font-bold">${error ?if_exists}</h3>
     <div class="error-desc">
-        <br/>您可以返回主页看看
-        <br/><a href="../device/ap" class="btn btn-success m-t">主页</a>
+        <a href="${viewHelper.getPath()}/device/ap" class="btn btn-success m-t">Home</a>
     </div>
 </div>
 
-<!--script src="../js/jquery-1.11.1.min.js"></script>
-<script src="../js/jquery-migrate-1.2.1.min.js"></script>
-<script src="../js/bootstrap.min.js"></script-->
+<!--script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/jquery-migrate-1.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script-->
 </body>
 </html>

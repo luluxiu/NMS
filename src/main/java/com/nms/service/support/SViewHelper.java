@@ -24,6 +24,16 @@ public class SViewHelper {
     private String username;
     private long startTime;
 
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
+    }
+
+    private String language;
+
     public String getPath() {
         return path;
     }
@@ -67,5 +77,8 @@ public class SViewHelper {
     public String getAppVersion() {
         return appVersion;
     }
+
+
+
 }
 

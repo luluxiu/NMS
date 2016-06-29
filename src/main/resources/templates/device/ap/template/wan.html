@@ -1,7 +1,7 @@
 <#include "../../../layout/header.html" >
 
 <div class="pageheader">
-  <h2><i class="fa fa-tasks"></i>WAN 模板</h2>
+  <h2><i class="fa fa-tasks"></i><@spring.message "temp.wan.text" /></h2>
 </div><!-- pageheader -->
 
 
@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <p class="toolbar">
         <a class="create btn btn-success" href="javascript:" >
-          <i class="fa fa-plus">&nbsp;&nbsp;</i>添加
+          <i class="fa fa-plus">&nbsp;&nbsp;</i><@spring.message "common.action.add" />
         </a>
         <span class="alert"></span>
       </p>
@@ -25,13 +25,13 @@
         <thead>
           <th data-formatter="runningFormatter">No.</th>
           <th data-field="id" data-align="center" data-visible="false">ID</th>
-          <th data-field="templateName" data-align="center" data-sortable="true">名称</th>
-          <th data-field="templateDescription" data-align="center" data-visible="false">描述</th>
+          <th data-field="templateName" data-align="center" data-sortable="true"><@spring.message "temp.common.name" /></th>
+          <th data-field="templateDescription" data-align="center" data-visible="false"><@spring.message "common.description.text" /></th>
           <th data-field="updatedAt" data-align="center" data-visible="true" data-sortable="true"
-            data-sort-order="desc">更新时间</th>
+            data-sort-order="desc"><@spring.message "common.update.text" /></th>
           <th data-field="createdAt" data-align="center" data-visible="false" data-sortable="true"
-            data-sort-order="desc">创建时间</th>
-          <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+            data-sort-order="desc"><@spring.message "common.create.text" /></th>
+          <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents"><@spring.message "common.action.text" /></th>
         </thead>
       </table>
 
@@ -49,20 +49,20 @@
                 <div class="modal-body form-horizontal m-t required-validate">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">模板名</label>
+                    <label class="col-sm-3 control-label"><@spring.message "temp.common.name" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="templateName" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">模板说明</label>
+                    <label class="col-sm-3 control-label"><@spring.message "common.description.text" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="templateDescription" class="form-control" />
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">协议</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wan.protocol" /></label>
                     <div class="col-sm-7">
                       <select name="protocol" class="form-control">
                         <option value="dhcp" selected>DHCP</option>
@@ -82,13 +82,13 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">子网掩码</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.static.netmask" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="netmask" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">网关</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.static.gateway" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="gateway" class="form-control" />
                       </div>
@@ -98,13 +98,13 @@
                   <!-- pppoe -->
                   <div class="form-group2" id="pppoe">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">用户名</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.pppoe.username" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="username" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">密码</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.pppoe.password" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="password" class="form-control" />
                       </div>
@@ -114,20 +114,20 @@
                   <!-- 3/4g -->
                   <div class="form-group2" id="3a4g">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">调制解调器节点</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.g3.modem" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="modemDevice" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">服务类型</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.g3.service" /></label>
                       <div class="col-sm-7" class="form-control">
                         <select name="serviceType" class="form-control">
-                          <option value="auto">自动</option>
-                          <option value="lte_only">仅LTE</option>
-                          <option value="umts_only">仅UMTS(WCDMA)</option>
-                          <option value="gprs_only">仅GPRS</option>
-                          <option value="evdo">CDMA/EV-DO</option>
+                          <option value="auto"><@spring.message "ap.wan.g3.sv.auto" /></option>
+                          <option value="lte_only"><@spring.message "ap.wan.g3.sv.lte" /></option>
+                          <option value="umts_only"><@spring.message "ap.wan.g3.sv.umts" /></option>
+                          <option value="gprs_only"><@spring.message "ap.wan.g3.sv.gprs" /></option>
+                          <option value="evdo"><@spring.message "ap.wan.g3.sv.evdo" /></option>
                         </select>
                       </div>
                     </div>
@@ -147,8 +147,8 @@
 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-success submit">提交</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><@spring.message "common.action.close" /></button>
+                  <button type="button" class="btn btn-success submit"><@spring.message "common.action.submit" /></button>
                 </div>
               </form>
             </div><!-- /.modal-content -->
@@ -250,50 +250,50 @@
       },
       messages: {
         templateName: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         templateDescription: {
-          maxlength: $.validator.format("最大长度{0}字节")
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />")
         },
         /* wan */
         protocol: {
-          required: "请选择 WAN 连接模式"
+          required: "<@spring.message "ap.msg.wan.protocol.required" />"
         },
         address: {
-          ipv4: "请输入有效的 IP",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.addr.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         netmask: {
-          ipv4: "请输入有效的子网掩码",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.netmask.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         gateway: {
-          ipv4: "请输入有效的网关",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.gateway.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         username: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         password: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         modemDevice: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         serviceType: {
-          required: "此项必填"
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         APN: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         dialNumber: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         }
       }
     });
@@ -301,7 +301,7 @@
     $table.on('post-body.bs.table', function () {
       var $search = $table.data('bootstrap.table')
         .$toolbar.find('.search input');
-      $search.attr('placeholder', '根据模板名字搜索 ...');
+      $search.attr('placeholder', '<@spring.message "temp.common.search" />');
     });
 
     $('.create').click(function() {
@@ -353,12 +353,12 @@
       if($modal.data('id') && $modal.data('id') >=0) {
         data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
         url = TEMPLATE_WAN_EDIT;
-        title = "修改";
+        title = "<@spring.message "common.action.alter" />";
       }
       else {
         data = $("#config").serialize() + '&_csrf=' + _csrf;
         url = TEMPLATE_WAN_BASE;
-        title = "添加";
+        title = "<@spring.message "common.action.add" />";
       }
       $.ajax({
         url: url,
@@ -368,16 +368,16 @@
           if(result.result == "success") {
             $modal.modal('hide');
             $table.bootstrapTable('refresh');
-            showAlert(title + '成功!', 'success');
+            showAlert(title + '<@spring.message "common.msg.success" />', 'success');
           }
           else {
             $modal.modal('hide');
-            showAlert(title + '失败! ' + result.msg, 'danger');
+            showAlert(title + '<@spring.message "common.msg.failed" /> ' + result.msg, 'danger');
           }
         },
         error: function () {
           $modal.modal('hide');
-          showAlert(title + '失败!', 'danger');
+          showAlert(title + '<@spring.message "common.msg.failed" />', 'danger');
         }
       });
     });
@@ -387,10 +387,10 @@
 
   window.actionEvents = {
     'click .update': function (e, value, row) {
-      showModal("修改", row);
+      showModal("<@spring.message "common.action.alter" />", row);
     },
     'click .remove': function (e, value, row) {
-      if (confirm('确定要删除这一项吗?')) {
+      if (confirm('<@spring.message "common.msg.delete.text" />')) {
         var data = "id=" + row.id + "&_csrf=" + _csrf;
         $.ajax({
           url: TEMPLATE_WAN_DEL,
@@ -399,14 +399,14 @@
           success: function (result) {
             if(result.result == "success") {
               $table.bootstrapTable('refresh');
-              showAlert('删除成功!', 'success');
+              showAlert('<@spring.message "common.msg.delete.success" />', 'success');
             }
             else {
-              showAlert('删除错误!' + result.msg, 'danger');
+              showAlert('<@spring.message "common.msg.delete.error" /> ' + result.msg, 'danger');
             }
           },
           error: function () {
-            showAlert('删除错误!', 'danger');
+            showAlert('<@spring.message "common.msg.delete.error" />', 'danger');
           }
         })
       }
@@ -455,8 +455,8 @@
   function actionFormatter(value) {
     return [
       '<div class="btn-group" role="group">',
-      '<a class="btn btn-success btn-xs update" href="javascript:"><i class="fa fa-cog">&nbsp;&nbsp;</i>修改</a>',
-      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
+      '<a class="btn btn-success btn-xs update" href="javascript:"><i class="fa fa-cog">&nbsp;&nbsp;</i><@spring.message "common.action.alter" /></a>',
+      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i><@spring.message "common.action.delete" /></a>',
       '</div>'
     ].join('');
   }
@@ -480,11 +480,11 @@
 
   /* page formatter */
   function formatRecordsPerPage(pageNumber) {
-    return '&nbsp;' + pageNumber + ' 每页';
+    return '&nbsp;' + pageNumber ;
   }
 
   function formatShowingRows(pageFrom, pageTo, totalRows) {
-    return '共 ' + totalRows + ' 项记录';
+    return totalRows + ' <@spring.message "common.msg.page.total" />';
   }
 
   function runningFormatter(value, row, index) {

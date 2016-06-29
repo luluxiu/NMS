@@ -7,6 +7,7 @@ import com.nms.model.DeviceRouterGroupNode;
 import com.nms.repository.DeviceRouterGroupNodeRepository;
 import static com.nms.service.support.CacheNameSettings.*;
 import com.nms.utils.DTOUtil;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -89,6 +90,7 @@ public class DeviceRouterGroupNodeService {
             return null;
         }
 
+        Hibernate.initialize(node.getGroup());
         return node.getGroup();
     }
 

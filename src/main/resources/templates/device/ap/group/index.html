@@ -1,7 +1,7 @@
 <#include "../../../layout/header.html" >
 
 <div class="pageheader">
-  <h2><i class="fa fa-tasks"></i>分组</h2>
+  <h2><i class="fa fa-tasks"></i><@spring.message "device.group.text" /></h2>
 </div><!-- pageheader -->
 
 
@@ -11,7 +11,7 @@
     <div class="col-md-12">
       <p class="toolbar">
         <a class="create btn btn-success" href="javascript:" >
-          <i class="fa fa-plus">&nbsp;&nbsp;</i>添加
+          <i class="fa fa-plus">&nbsp;&nbsp;</i><@spring.message "common.action.add" />
         </a>
         <span class="alert"></span>
       </p>
@@ -24,18 +24,18 @@
         data-search-on-enter-key='true'>
         <thead>
           <th data-formatter="runningFormatter">No.</th>
-          <th data-field="groupId" data-align="center" data-visible="false">分组ID</th>
-          <th data-field="name" data-align="center" data-sortable="true" >名称</th>
-          <th data-field="groupWanName" data-align="center" >WAN 模板</th>
-          <th data-field="groupLanName" data-align="center" >LAN 模板</th>
-          <th data-field="groupWifiName" data-align="center" >WiFi 模板</th>
-          <th data-field="groupOTAName" data-align="center" >OTA 模板</th>
-          <th data-field="description" data-align="center" data-visible="false">描述</th>
+          <th data-field="groupId" data-align="center" data-visible="false"><@spring.message "device.group.groupid" /></th>
+          <th data-field="name" data-align="center" data-sortable="true" ><@spring.message "deivce.group.name" /></th>
+          <th data-field="groupWanName" data-align="center" ><@spring.message "temp.wan.text" /></th>
+          <th data-field="groupLanName" data-align="center" ><@spring.message "temp.lan.text" /></th>
+          <th data-field="groupWifiName" data-align="center" ><@spring.message "temp.wifi.text" /></th>
+          <th data-field="groupOTAName" data-align="center" ><@spring.message "temp.ota.text" /></th>
+          <th data-field="description" data-align="center" data-visible="false"><@spring.message "common.description.text" /></th>
           <th data-field="updatedAt" data-align="center" data-visible="true" data-sortable="true"
-            data-sort-order="desc">更新时间</th>
+            data-sort-order="desc"><@spring.message "common.update.text" /></th>
           <th data-field="createdAt" data-align="center" data-visible="false" data-sortable="true"
-            data-sort-order="desc">创建时间</th>
-          <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents">操作</th>
+            data-sort-order="desc"><@spring.message "common.create.text" /></th>
+          <th data-field="action" data-align="center" data-formatter="actionFormatter" data-events="actionEvents"><@spring.message "common.action.text" /></th>
         </thead>
       </table>
 
@@ -53,7 +53,7 @@
                 <div class="modal-body form-horizontal m-t required-validate">
 
                   <div class="form-group">
-                    <label class="col-md-3 control-label">名称 : </label>
+                    <label class="col-md-3 control-label"><@spring.message "deivce.group.name" /> </label>
                     <div class="col-md-7">
                       <input type="text" class="form-control" name="name" id="name" >
                     </div>
@@ -61,18 +61,18 @@
 
                   <!-- wan -->
                   <div class="form-group">
-                    <label class="col-md-3 control-label">模板WAN : </label>
+                    <label class="col-md-3 control-label"><@spring.message "temp.wan.text" /></label>
                     <div class="col-md-7">
                       <select name="groupWanName" class="selectpicker show-menu-arrow form-control" data-size="6"
-                              data-live-search="true"  title="选择模板 ..." >
+                              data-live-search="true"  title="<@spring.message "device.group.temp.title" />" >
                         <#if wans ??>
                           <#list wans as wan>
                             <option value="${wan.getTemplateName()}">${wan.getTemplateName()}</option>
                           <#else>
-                            <option>目前还没有模板</option>
+                            <option><@spring.message "device.group.temp.none" /></option>
                           </#list>
                         <#else>
-                          <option>目前还没有模板</option>
+                          <option><@spring.message "device.group.temp.none" /></option>
                         </#if>
                       </select>
                     </div>
@@ -80,18 +80,18 @@
 
                   <!-- lan -->
                   <div class="form-group">
-                    <label class="col-md-3 control-label">模板LAN : </label>
+                    <label class="col-md-3 control-label"><@spring.message "temp.lan.text" /></label>
                     <div class="col-md-7">
                       <select name="groupLanName" class="selectpicker show-menu-arrow form-control" data-size="6"
-                              data-live-search="true"  title="选择模板 ..." >
+                              data-live-search="true"  title="<@spring.message "device.group.temp.title" />" >
                         <#if lans ??>
                           <#list lans as lan>
                             <option value="${lan.getTemplateName()}">${lan.getTemplateName()}</option>
                           <#else>
-                            <option>目前还没有模板</option>
+                            <option><@spring.message "device.group.temp.none" /></option>
                           </#list>
                         <#else>
-                          <option>目前还没有模板</option>
+                          <option><@spring.message "device.group.temp.none" /></option>
                         </#if>
                       </select>
                     </div>
@@ -99,18 +99,18 @@
 
                   <!-- wifi -->
                   <div class="form-group">
-                    <label class="col-md-3 control-label">模板WiFi : </label>
+                    <label class="col-md-3 control-label"><@spring.message "temp.wifi.text" /></label>
                     <div class="col-md-7">
                       <select name="groupWifiName" class="selectpicker show-menu-arrow form-control" data-size="6"
-                              data-live-search="true"  title="选择模板 ..." >
+                              data-live-search="true"  title="<@spring.message "device.group.temp.title" />" >
                         <#if wifis ??>
                           <#list wifis as wifi>
                             <option value="${wifi.getTemplateName()}">${wifi.getTemplateName()}</option>
                           <#else>
-                            <option>目前还没有模板</option>
+                            <option><@spring.message "device.group.temp.none" /></option>
                           </#list>
                         <#else>
-                          <option>目前还没有模板</option>
+                          <option><@spring.message "device.group.temp.none" /></option>
                         </#if>
                       </select>
                     </div>
@@ -118,25 +118,25 @@
 
                   <!-- ota -->
                   <div class="form-group">
-                    <label class="col-md-3 control-label">模板OTA : </label>
+                    <label class="col-md-3 control-label"><@spring.message "temp.ota.text" /></label>
                     <div class="col-md-7">
                       <select name="groupOTAName" class="selectpicker show-menu-arrow form-control" data-size="6"
-                              data-live-search="true"  title="选择模板 ..." >
+                              data-live-search="true"  title="<@spring.message "device.group.temp.title" />" >
                         <#if otas ??>
                           <#list otas as ota>
                             <option value="${ota.getTemplateName()}">${ota.getTemplateName()}</option>
                             <#else>
-                              <option>目前还没有模板</option>
+                              <option><@spring.message "device.group.temp.none" /></option>
                           </#list>
                           <#else>
-                            <option>目前还没有模板</option>
+                            <option><@spring.message "device.group.temp.none" /></option>
                         </#if>
                       </select>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="col-md-3 control-label">描述 : </label>
+                    <label class="col-md-3 control-label"><@spring.message "common.description.text" /></label>
                     <div class="col-md-7">
                       <input type="text" class="form-control" name="description" id="description" >
                     </div>
@@ -144,8 +144,8 @@
 
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                  <button type="button" class="btn btn-success submit">提交</button>
+                  <button type="button" class="btn btn-default" data-dismiss="modal"><@spring.message "common.action.close" /></button>
+                  <button type="button" class="btn btn-success submit"><@spring.message "common.action.submit" /></button>
                 </div>
               </form>
             </div><!-- /.modal-content -->
@@ -190,11 +190,11 @@
       },
       messages: {
         name: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         description: {
-          maxlength: $.validator.format("最大长度{0}字节")
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />")
         }
       }
     });
@@ -202,7 +202,7 @@
     $table.on('post-body.bs.table', function () {
       var $search = $table.data('bootstrap.table')
         .$toolbar.find('.search input');
-      $search.attr('placeholder', '根据分组名搜索 ...');
+      $search.attr('placeholder', '<@spring.message "device.group.search" />');
     });
 
     $('.create').click(function() {
@@ -221,12 +221,12 @@
       if($modal.data('id') && $modal.data('id') >=0) {
         data = $("#config").serialize() + "&id=" + $modal.data('id') + '&_csrf=' + _csrf;
         url = GROUP_EDIT;
-        title = "修改";
+        title = "<@spring.message "common.action.alter" />";
       }
       else {
         data = $("#config").serialize() + '&_csrf=' + _csrf;
         url = GROUP_BASE;
-        title = "添加";
+        title = "<@spring.message "common.action.add" />";
       }
       $.ajax({
         url: url,
@@ -236,16 +236,16 @@
           if(result.result == "success") {
             $modal.modal('hide');
             $table.bootstrapTable('refresh');
-            showAlert(title + '成功!', 'success');
+            showAlert(title + '<@spring.message "common.msg.success" />', 'success');
           }
           else {
             $modal.modal('hide');
-            showAlert(title + '失败! ' + result.msg, 'danger');
+            showAlert(title + '<@spring.message "common.msg.failed" /> ' + result.msg, 'danger');
           }
         },
         error: function () {
           $modal.modal('hide');
-          showAlert(title + '失败!', 'danger');
+          showAlert(title + '<@spring.message "common.msg.failed" />', 'danger');
         }
       });
     });
@@ -255,10 +255,10 @@
 
   window.actionEvents = {
     'click .update': function (e, value, row) {
-      showModal($(this).attr('title'), row);
+      showModal("<@spring.message "common.action.alter" />", row);
     },
     'click .remove': function (e, value, row) {
-      if (confirm('确定要删除这一项吗?')) {
+      if (confirm('<@spring.message "common.msg.delete.text" />')) {
         var data = "id=" + row.id + "&_csrf=" + _csrf;
         $.ajax({
           url: GROUP_DEL,
@@ -267,14 +267,14 @@
           success: function (result) {
             if(result.result == "success") {
               $table.bootstrapTable('refresh');
-              showAlert('删除成功!', 'success');
+              showAlert('<@spring.message "common.msg.delete.success" />', 'success');
             }
             else {
-              showAlert('删除错误!' + result.msg, 'danger');
+              showAlert('<@spring.message "common.msg.delete.error" /> ' + result.msg, 'danger');
             }
           },
           error: function () {
-            showAlert('删除错误!', 'danger');
+            showAlert('<@spring.message "common.msg.delete.error" />', 'danger');
           }
         })
       }
@@ -329,10 +329,10 @@
 
     return [
       '<div class="btn-group" role="group">',
-      '<a class="btn btn-default btn-xs" href="'+config+'" target="_blank"><i class="fa fa-cog">&nbsp;&nbsp;</i>查看</a>',
-      '<a class="btn btn-default btn-xs" href="'+node+'"><i class="fa fa-info">&nbsp;&nbsp;</i>节点</a>',
-      '<a class="btn btn-default btn-xs update" href="javascript:"><i class="fa fa-pencil">&nbsp;&nbsp;</i>修改</a>',
-      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i>删除</a>',
+      '<a class="btn btn-default btn-xs" href="'+config+'" target="_blank"><i class="fa fa-cog">&nbsp;&nbsp;</i><@spring.message "device.group.details" /></a>',
+      '<a class="btn btn-default btn-xs" href="'+node+'"><i class="fa fa-info">&nbsp;&nbsp;</i><@spring.message "menu.group.node.text" /></a>',
+      '<a class="btn btn-default btn-xs update" href="javascript:"><i class="fa fa-pencil">&nbsp;&nbsp;</i><@spring.message "common.action.alter" /></a>',
+      '<a class="btn btn-danger btn-xs remove " href="javascript:"><i class="fa fa-trash">&nbsp;&nbsp;</i><@spring.message "common.action.delete" /></a>',
       '</div>'
     ].join('');
   }
@@ -356,11 +356,11 @@
 
   /* page formatter */
   function formatRecordsPerPage(pageNumber) {
-    return '&nbsp;' + pageNumber + ' 每页';
+    return '&nbsp;' + pageNumber;
   }
 
   function formatShowingRows(pageFrom, pageTo, totalRows) {
-    return '共 ' + totalRows + ' 项记录';
+    return totalRows + ' <@spring.message "common.msg.page.total" />';
   }
 
   function runningFormatter(value, row, index) {

@@ -123,4 +123,11 @@ public class HomeController {
 
         return "portal";
     }
+
+    @RequestMapping("language")
+    public String changLanguage(Model model) {
+
+        model.addAttribute("result", "success");
+        return "jsonTemplate";
+    }
 }

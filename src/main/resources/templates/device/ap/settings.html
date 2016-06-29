@@ -1,12 +1,12 @@
 <#include "../../layout/header.html" >
 
 <div class="pageheader">
-  <h2><i class="fa fa-tasks"></i>设备</h2>
+  <h2><i class="fa fa-tasks"></i><@spring.message "device.text" /></h2>
   <div class="breadcrumb-wrapper">
     <ol class="breadcrumb">
-      <li><a href="${viewHelper.getPath()}/device/ap">设备</a></li>
+      <li><a href="${viewHelper.getPath()}/device/ap"><@spring.message "device.text" /></a></li>
       <li>${router.getMac() ?if_exists}</a></li>
-      <li class="active">设置</li>
+      <li class="active"><@spring.message "ap.settings.setup" /></li>
     </ol>
   </div>
 </div>
@@ -22,16 +22,16 @@
         <div class="panel-body">
           <div class="form-group">
             <div class="col-sm-9">
-              <select id="scope" class="select2" data-placeholder="选择域 ..." multiple="multiple">
-                <option value="all">ALL</option>
-                <option value="wan">WAN</option>
-                <option value="lan">LAN</option>
-                <option value="wifi">WiFi</option>
-                <option value="ota">OTA</option>
+              <select id="scope" class="select2" data-placeholder="<@spring.message "ap.settings.scope.text" />" multiple="multiple">
+                <option value="all"><@spring.message "ap.settings.scope.all" /></option>
+                <option value="wan"><@spring.message "ap.wan.text" /></option>
+                <option value="lan"><@spring.message "ap.lan.text" /></option>
+                <option value="wifi"><@spring.message "ap.wifi.text" /></option>
+                <option value="ota"><@spring.message "ap.ota.text" /></option>
               </select>
             </div>
             <div class="col-sm-3">
-              <input type="button" class="btn btn-success" name="config" value="下发配置" />
+              <input type="button" class="btn btn-success" name="config" value="<@spring.message "ap.settings.effect" />" />
             </div>
           </div>
         </div>
@@ -46,21 +46,21 @@
         <div class="panel-heading">
           <div class="row">
             <div class="col-sm-9">
-              <h4 class="panel-title">设置</h4>
+              <h4 class="panel-title"><@spring.message "ap.settings.setup" /></h4>
             </div>
             <div class="col-sm-3">
-              <input type="button" class="btn btn-success" name="saveconfig" value="保存配置" />
-              <input type="button" class="btn btn-default" name="refresh" value="刷新" />
+              <input type="button" class="btn btn-success" name="saveconfig" value="<@spring.message "ap.settings.save" />" />
+              <input type="button" class="btn btn-default" name="refresh" value="<@spring.message "ap.settings.refresh" />" />
             </div>
           </div>
         </div>
 
         <div class="panel-body">
           <ul class="nav nav-tabs nav-line">
-            <li class="active"><a href="#wan" data-toggle="tab"><strong>WAN</strong></a></li>
-            <li><a href="#lan" data-toggle="tab"><strong>LAN</strong></a></li>
-            <li><a href="#wifi" data-toggle="tab"><strong>WiFi</strong></a></li>
-            <li><a href="#ota" data-toggle="tab"><strong>OTA</strong></a></li>
+            <li class="active"><a href="#wan" data-toggle="tab"><strong><@spring.message "ap.wan.text" /></strong></a></li>
+            <li><a href="#lan" data-toggle="tab"><strong><@spring.message "ap.lan.text" /></strong></a></li>
+            <li><a href="#wifi" data-toggle="tab"><strong><@spring.message "ap.wifi.text" /></strong></a></li>
+            <li><a href="#ota" data-toggle="tab"><strong><@spring.message "ap.ota.text" /></strong></a></li>
           </ul>
 
           <!-- Tab panes -->
@@ -70,7 +70,7 @@
               <div class="row">
                 <div class="col-md-10">
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">协议</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wan.protocol" /></label>
                     <div class="col-sm-7">
                       <select name="protocol" class="form-control">
                         <option value="dhcp" selected>DHCP</option>
@@ -90,13 +90,13 @@
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">子网掩码</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.static.netmask" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="netmask" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">网关</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.static.gateway" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="gateway" class="form-control" />
                       </div>
@@ -106,13 +106,13 @@
                   <!-- pppoe -->
                   <div class="form-group2" id="pppoe">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">用户名</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.pppoe.username" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="username" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">密码</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.pppoe.password" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="password" class="form-control" />
                       </div>
@@ -122,13 +122,13 @@
                   <!-- 3/4g -->
                   <div class="form-group2" id="3a4g">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">调制解调器节点</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.g3.modem" /></label>
                       <div class="col-sm-7">
                         <input type="text" name="modemDevice" class="form-control" />
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">服务类型</label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.wan.g3.service" /></label>
                       <div class="col-sm-7">
                         <select name="serviceType" class="form-control">
                           <option value="auto">自动</option>
@@ -167,7 +167,7 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">子网掩码</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.lan.netmask" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="lanNetmask" class="form-control" />
                     </div>
@@ -178,24 +178,24 @@
                     <div class="col-sm-7">
                       <div class="ckbox ckbox-success ">
                         <input type="checkbox" id="dhcp" name="dhcp" checked="checked" value="1" />
-                        <label for="dhcp">开启DHCP</label>
+                        <label for="dhcp"><@spring.message "ap.lan.dhcp.text" /></label>
                       </div>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">开始</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.lan.dhcp.start" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="start" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">客户数</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.lan.dhcp.limit" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="limit" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">租用时间</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.lan.dhcp.leasetime" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="leaseTime" class="form-control" />
                     </div>
@@ -209,11 +209,11 @@
               <div class="row">
                 <div class="col-md-10">
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">WiFi</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.text" /></label>
                     <div class="col-sm-7">
                       <div class="ckbox ckbox-success ">
                         <input type="checkbox" id="wifienable" name="wifi" checked="checked" value="1" />
-                        <label for="wifienable">开启WiFi</label>
+                        <label for="wifienable"><@spring.message "ap.wifi.open.text" /></label>
                       </div>
                     </div>
                   </div>
@@ -224,44 +224,44 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">信道</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.channel" /></label>
                     <div class="col-sm-7">
                       <select  id="channel" name="channel" class="form-control">
-                          <option value="0" selected="selected">auto</option>
-                          <option value="1">2412MHz (Channel 1)</option>
-                          <option value="2">2417MHz (Channel 2)</option>
-                          <option value="3">2422MHz (Channel 3)</option>
-                          <option value="4">2427MHz (Channel 4)</option>
-                          <option value="5">2432MHz (Channel 5)</option>
-                          <option value="6">2437MHz (Channel 6)</option>
-                          <option value="7">2442MHz (Channel 7)</option>
-                          <option value="8">2447MHz (Channel 8)</option>
-                          <option value="9">2452MHz (Channel 9)</option>
-                          <option value="10">2457MHz (Channel 10)</option>
-                          <option value="11">2462MHz (Channel 11)</option>
+                          <option value="0" selected="selected"><@spring.message "ap.wifi.channel0" /></option>
+                          <option value="1">2412MHz (<@spring.message "ap.wifi.channel1" />)</option>
+                          <option value="2">2417MHz (<@spring.message "ap.wifi.channel2" />)</option>
+                          <option value="3">2422MHz (<@spring.message "ap.wifi.channel3" />)</option>
+                          <option value="4">2427MHz (<@spring.message "ap.wifi.channel4" />)</option>
+                          <option value="5">2432MHz (<@spring.message "ap.wifi.channel5" />)</option>
+                          <option value="6">2437MHz (<@spring.message "ap.wifi.channel6" />)</option>
+                          <option value="7">2442MHz (<@spring.message "ap.wifi.channel7" />)</option>
+                          <option value="8">2447MHz (<@spring.message "ap.wifi.channel8" />)</option>
+                          <option value="9">2452MHz (<@spring.message "ap.wifi.channel9" />)</option>
+                          <option value="10">2457MHz (<@spring.message "ap.wifi.channel10" />)</option>
+                          <option value="11">2462MHz (<@spring.message "ap.wifi.channel11" />)</option>
                       </select>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">最大连接数</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.maxconnection" /></label>
                     <div class="col-sm-7">
                       <input type="text" id="maxStation" name="maxStation" class="form-control" />
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">加密</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.encryption" /></label>
                     <div class="col-sm-7">
                       <select  id="encryption" name="encryption" class="form-control">
-                        <option value="none">No Encryption</option>
-                        <option value="open">WEP开放认证</option>
+                        <option value="none"><@spring.message "ap.wifi.enc.none" /></option>
+                        <option value="open">WEP</option>
                         <option value="psk">WPA-PSK</option>
                         <option value="psk2">WPA2-PSK</option>
-                        <option value="psk-mixed">WPA-PSK/WPA2-PSK Mixed Mode</option>
+                        <option value="psk-mixed"><@spring.message "ap.wifi.enc.wpamixed" /></option>
                       </select>
                     </div>
                   </div>
                   <div class="form-group" id="wifi-encryption-cipher">
-                    <label class="col-sm-3 control-label">算法</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.cipher" /></label>
                     <div class="col-sm-7">
                       <select id="cipher" name="cipher" class="form-control">
                         <option value="aes">AES</option>
@@ -271,7 +271,7 @@
                     </div>
                   </div>
                   <div class="form-group" id="wifi-encryption-key">
-                    <label class="col-sm-3 control-label">密码</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.wifi.key" /></label>
                     <div class="col-sm-7">
                       <input type="text" id="key" name="key" class="form-control" />
                     </div>
@@ -286,27 +286,27 @@
                 <div class="col-md-10">
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">模式</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.ota.mode.text" /></label>
                     <div class="col-sm-7">
                       <select name="mode" class="form-control">
-                        <option value="0" selected>从不检查更新</option>
-                        <option value="1">始终检查更新</option>
-                        <option value="2">在时间窗口内检查更新</option>
+                        <option value="0" selected><@spring.message "ap.ota.mode.m0" /></option>
+                        <option value="1"><@spring.message "ap.ota.mode.m1" /></option>
+                        <option value="2"><@spring.message "ap.ota.mode.m2" /></option>
                       </select>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">OTA 服务器地址</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.ota.url" /></label>
                     <div class="col-sm-7">
                       <input type="text" name="server" class="form-control" />
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label class="col-sm-3 control-label">升级检测间隔</label>
+                    <label class="col-sm-3 control-label"><@spring.message "ap.ota.delay" /></label>
                     <div class="col-sm-7">
-                      <input type="text" name="pridDelay" class="form-control" /> 分钟
+                      <input type="text" name="pridDelay" class="form-control" /> <@spring.message "ap.ota.min" />
                     </div>
                   </div>
 
@@ -315,22 +315,22 @@
                     <div class="col-sm-7">
                       <div class="ckbox ckbox-success ">
                         <input type="checkbox" id="restoreFlag" name="restoreFlag" checked="checked" value="1" />
-                        <label for="restoreFlag">升级后复位</label>
+                        <label for="restoreFlag"><@spring.message "ap.ota.retst.test1" /></label>
                       </div>
                     </div>
                   </div>
 
                   <div class="form-group2" id="windowOptions">
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">时间窗口起始时间 </label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.ota.window.start" /> </label>
                       <div class="col-sm-7">
                         <input type="text" name="windowStart" class="form-control" /> (0~23)
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="col-sm-3 control-label">时间窗口大小 </label>
+                      <label class="col-sm-3 control-label"><@spring.message "ap.ota.window.size" /> </label>
                       <div class="col-sm-7">
-                        <input type="text" name="windowSize" class="form-control" /> (1~23) 小时
+                        <input type="text" name="windowSize" class="form-control" /> (1~23) <@spring.message "ap.ota.hour" />
                       </div>
                     </div>
                   </div>
@@ -522,114 +522,114 @@
       messages: {
         /* wan */
         protocol: {
-          required: "请选择 WAN 连接模式"
+          required: "<@spring.message "ap.msg.wan.protocol.required" />"
         },
         address: {
-          ipv4: "请输入有效的 IP",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.addr.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         netmask: {
-          ipv4: "请输入有效的子网掩码",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.netmask.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         gateway: {
-          ipv4: "请输入有效的网关",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.wan.gateway.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         username: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         password: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         modemDevice: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         serviceType: {
-          required: "此项必填"
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         APN: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         dialNumber: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         /* lan */
         lanAddress: {
-          ipv4: "请输入有效的 IP",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.lan.lanaddr.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         lanNetmask: {
-          ipv4: "请输入有效的子网掩码",
-          required: "此项必填"
+          ipv4: "<@spring.message "ap.msg.lan.lannetmask.ipv4" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         start: {
-          digits: "请输入正整数",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         limit: {
-          digits: "请输入正整数",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         leaseTime: {
-          required: "此项必填"
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         /* wifi */
         ssid: {
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         channel: {
-          digits: "请选择信道",
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.wifi.channel.digits" />",
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         maxStation: {
-          digits: "请输入正整数",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         encryption: {
-          required: "请选择加密方式"
+          required: "<@spring.message "ap.msg.wifi.encryption.required" />"
         },
         cipher: {
-          required: "请选择算法"
+          required: "<@spring.message "ap.msg.wifi.cipher.required" />"
         },
         key: {
-          rangelength: $.validator.format("密码长度应在 {0} - {1} 之间"),
-          required: "此项必填"
+          rangelength: $.validator.format("<@spring.message "ap.msg.wifi.key.ranglen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         /* ota */
         mode: {
-          digits: "请选择 OTA 模式",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.ota.mode.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         server: {
-          url: "请输入有效的URL地址",
-          maxlength: $.validator.format("最大长度{0}字节"),
-          required: "此项必填"
+          url: "<@spring.message "ap.msg.ota.server.url" />",
+          maxlength: $.validator.format("<@spring.message "ap.msg.common.maxlen" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         pridDelay: {
-          digits: "请输入正整数",
-          min: $.validator.format("最小{0}分钟"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          min: $.validator.format("<@spring.message "ap.msg.ota.delay.min" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         windowStart: {
-          digits: "请输入正整数",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         },
         windowSize: {
-          digits: "请输入正整数",
-          range: $.validator.format("请输入 {0} - {1} 整数"),
-          required: "此项必填"
+          digits: "<@spring.message "ap.msg.common.digits" />",
+          range: $.validator.format("<@spring.message "ap.msg.common.range" />"),
+          required: "<@spring.message "ap.msg.common.required" />"
         }
       }
     });
@@ -649,10 +649,10 @@
         type: "post",
         data: $("#settings").serialize(),
         success: function() {
-          popMessage("success", "配置保存成功");
+          popMessage("success", "<@spring.message "ap.msg.save.success" />");
         },
         error: function() {
-          popMessage("danger", "配置保存失败");
+          popMessage("danger", "<@spring.message "ap.msg.save.error" />");
         }
       });
     });
@@ -667,10 +667,10 @@
         type: "post",
         data: "scope=" + $("#scope").val() + "&_csrf=" + $("input[name='_csrf']").val(),
         success: function() {
-          popMessage("success", "配置下发成功")
+          popMessage("success", "<@spring.message "ap.msg.effect.success" />")
         },
         error: function() {
-          popMessage("danger", "配置下发失败");
+          popMessage("danger", "<@spring.message "ap.msg.effect.error" />");
         }
       });
     });
@@ -741,14 +741,14 @@
     $("select[name='mode']").change(function(){
 
       switch($("select[name='mode']").val()) {
-        case 0:
+        case "0":
           /* pass through */
 
-        case 1:
+        case "1":
           $("#windowOptions").hide();
           break;
 
-        case 2:
+        case "2":
           $("#windowOptions").show();
           break;
 
@@ -770,7 +770,7 @@
         processSettings(result);
       },
       error: function() {
-        popMessage("danger", "获取信息失败");
+        popMessage("danger", "<@spring.message "ap.info.error" />");
       }
     });
   }
