@@ -28,5 +28,5 @@
         <appender-ref ref="FILE" />
     </root>
 
-    <logger name="com.tigercel.pyroblast" level="ALL" />
+    <logger name="com.tigercel.nms" level="ALL" />
 </configuration>

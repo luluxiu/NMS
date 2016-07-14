@@ -13,17 +13,11 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
 
 jar {
 	baseName = 'nms'
 	version = '0.0.1-SNAPSHOT'
 }
-
-configurations {
-	provided
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -44,9 +38,8 @@ dependencies {
 	compile('org.springframework.session:spring-session')
 	compile('org.springframework.boot:spring-boot-starter-freemarker')
 	compile('org.springframework.boot:spring-boot-starter-validation')
-	provided('org.springframework.boot:spring-boot-starter-web') {
-		exclude module: 'spring-boot-starter-tomcat'
-	}
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 	runtime('mysql:mysql-connector-java')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 

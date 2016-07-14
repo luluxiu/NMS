@@ -90,10 +90,10 @@ public class AppErrorController implements ErrorController {
                                                    boolean includeStackTrace) {
         RequestAttributes requestAttributes = new ServletRequestAttributes(request);
         Map<String, Object> map = this.errorAttributes.getErrorAttributes(requestAttributes,includeStackTrace);
-        String url = request.getRequestURL().toString();
+        //String url = request.getRequestURL().toString();
 
-        map.put("url", url);
-        logger.error("====== AppErrorController.method [error info]: status-" + map.get("status") +", request url-" + url);
+        //map.put("url", url);
+        logger.error("====== AppErrorController.method [error info]: status-" + map.get("status"));
         return map;
     }
 
